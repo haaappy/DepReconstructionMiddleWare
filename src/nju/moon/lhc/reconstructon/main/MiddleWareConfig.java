@@ -3,6 +3,7 @@ package nju.moon.lhc.reconstructon.main;
 import nju.moon.lhc.reconstruction.DependencyManager;
 import nju.moon.lhc.reconstruction.LoadClassManager;
 import nju.moon.lhc.reconstruction.VFSManager;
+import nju.moon.lhc.reconstructon.util.XMLReader;
 
 
 public class MiddleWareConfig {
@@ -14,9 +15,9 @@ public class MiddleWareConfig {
 	
 	private boolean isRunning;
 	
-	private static final String DEFAULT_HOME = "/home/happy/JBOSS/OSGI-TEST-DEPLOYMENT/";
-	private static final int DEPLOY_WAY_NORMAL = 1;
-	private static final int DEPLOY_WAY_JAR = 2;
+	public static final String DEFAULT_HOME = "/home/happy/JBOSS/OSGI-TEST-DEPLOYMENT/";
+	public static final int DEPLOY_WAY_NORMAL = 1;
+	public static final int DEPLOY_WAY_JAR = 2;
 	
 	
 	private DependencyManager depManager;
@@ -51,18 +52,83 @@ public class MiddleWareConfig {
 	}
 	
 	private MiddleWareConfig(){
-		// use default
-		depManager = new DependencyManager();
-		lcManager = new LoadClassManager();
-		vfsManager = new VFSManager();
+		initConfig(MiddleWareConfig.DEFAULT_HOME);
 	}
 	
 	private MiddleWareConfig(String curHome){
-		//TODO read the config.xml in curHome
-		//TODO set the home and way
-		// the way deals with how to new the object
-		depManager = new DependencyManager();
-		lcManager = new LoadClassManager();
-		vfsManager = new VFSManager();
+		initConfig(curHome);	
+	}
+	
+	private void initConfig(String curHome){
+		String[] configResults = XMLReader.readAllInfoByConfigXMLFile(curHome);
+		if (configResults != null && configResults.length == 4){
+			setCurMiddleWareHome(configResults[0]);
+			if (configResults[1].equals("Normal")){
+				setCurDeploymentWay(MiddleWareConfig.DEPLOY_WAY_NORMAL);
+			}
+			else{
+				setCurDeploymentWay(MiddleWareConfig.DEPLOY_WAY_JAR);
+			}
+			setDefaultMiddleWareHome(configResults[2]);
+			
+			// TODO  the managers need to change 
+			// the way deals with how to new the object
+			
+			// TODO how about isRunning??
+			depManager = new DependencyManager();
+			lcManager = new LoadClassManager();
+			vfsManager = new VFSManager();
+			
+			if (configResults[3].endsWith("Normal")){
+				setDefaultDeploymentWay(MiddleWareConfig.DEPLOY_WAY_NORMAL);
+			}
+			else{
+				setDefaultDeploymentWay(MiddleWareConfig.DEPLOY_WAY_JAR);
+			}
+			
+		}
+		else{
+			System.out.println("reading config.xml is error in MiddleWareConfig!!");
+		}
+	}
+
+	public String getCurMiddleWareHome() {
+		return curMiddleWareHome;
+	}
+
+	public void setCurMiddleWareHome(String curMiddleWareHome) {
+		this.curMiddleWareHome = curMiddleWareHome;
+	}
+
+	public int getCurDeploymentWay() {
+		return curDeploymentWay;
+	}
+
+	public void setCurDeploymentWay(int curDeploymentWay) {
+		this.curDeploymentWay = curDeploymentWay;
+	}
+
+	public String getDefaultMiddleWareHome() {
+		return defaultMiddleWareHome;
+	}
+
+	public void setDefaultMiddleWareHome(String defaultMiddleWareHome) {
+		this.defaultMiddleWareHome = defaultMiddleWareHome;
+	}
+
+	public int getDefaultDeploymentWay() {
+		return defaultDeploymentWay;
+	}
+
+	public void setDefaultDeploymentWay(int defaultDeploymentWay) {
+		this.defaultDeploymentWay = defaultDeploymentWay;
+	}
+
+	public boolean isRunning() {
+		return isRunning;
+	}
+
+	public void setRunning(boolean isRunning) {
+		this.isRunning = isRunning;
 	}
 }
