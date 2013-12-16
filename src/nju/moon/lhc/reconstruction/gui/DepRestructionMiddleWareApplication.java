@@ -125,6 +125,12 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
         topPanel.add(getJList1());
         show(topPanel);
     }
+    
+    @Override
+    public void shutdown(){
+    	System.out.println("shut down!!!");
+    	super.shutdown();
+    }
 
     public static void main(String[] args) {
         launch(DepRestructionMiddleWareApplication.class, args);

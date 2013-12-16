@@ -17,7 +17,7 @@ public class DependencyManager {
 		return SingletonHolder.INSTANCE;
 	}
 	
-	private DependencyManager(){
+	public DependencyManager(){
 		systemRoot = new DeploymentNode();
 		nodeMap = new HashMap<String, DeploymentNode>();
 	}

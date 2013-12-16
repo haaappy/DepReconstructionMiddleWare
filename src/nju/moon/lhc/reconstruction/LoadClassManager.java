@@ -15,7 +15,7 @@ public class LoadClassManager {
 		return SingletonHolder.INSTANCE;
 	}
 	
-	private LoadClassManager(){
+	public LoadClassManager(){
 		
 	}
 	

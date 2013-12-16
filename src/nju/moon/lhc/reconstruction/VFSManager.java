@@ -8,6 +8,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 
+import nju.moon.lhc.reconstructon.main.MiddleWareMain;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -30,7 +32,7 @@ public class VFSManager {
 		return SingletonHolder.INSTANCE;
 	}
 	
-	private VFSManager(){
+	public VFSManager(){
 		initDeploymentSet();
 		readAllXMLInfo();
 		new PollingThread().start();
@@ -62,7 +64,7 @@ public class VFSManager {
 					// execute
 					for (String nodeName: updateSet){
 						for (String mainNodeName: readInvokeNodeXMLFile(ROOT_DIR + nodeName + "/" + nodeName + ".xml")){
-							ReconstructionMain.executeMainMethodByNode(mainNodeName);
+							MiddleWareMain.executeMainMethodByNode(mainNodeName);
 						}	
 					}
 					
