@@ -15,7 +15,7 @@ public class ExtReconstructionClassLoader extends ReconstructionClassLoader {
 		super(classLoaderName);
 	}
 	
-	public ExtReconstructionClassLoader(ExtReconstructionClassLoader cl){
+	public ExtReconstructionClassLoader(ReconstructionClassLoader cl){
 		super(cl);
 	}
 	

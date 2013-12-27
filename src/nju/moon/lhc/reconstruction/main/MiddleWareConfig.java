@@ -1,5 +1,7 @@
 package nju.moon.lhc.reconstruction.main;
 
+import nju.moon.lhc.reconstruction.classloader.ExtReconstructionClassLoader;
+import nju.moon.lhc.reconstruction.classloader.ReconstructionClassLoader;
 import nju.moon.lhc.reconstruction.manager.dependency.DependencyManager;
 import nju.moon.lhc.reconstruction.manager.loadclass.JarLoadClassManager;
 import nju.moon.lhc.reconstruction.manager.loadclass.LoadClassManager;
@@ -109,6 +111,32 @@ public class MiddleWareConfig {
 			setVfsManager(new NormalVFSManager());
 		}
 		
+	}
+	
+	public ReconstructionClassLoader createClassLoaderByName(String nodeName){
+		if (curClassLoader == MiddleWareConfig.RECONSTRUCTION_CLASSLOADER){
+			return new ReconstructionClassLoader(nodeName);
+		}
+		else if (curClassLoader == MiddleWareConfig.EXT_RECONSTRUCTION_CLASSLOADER){
+			return new ExtReconstructionClassLoader(nodeName);
+		}
+		else{
+			System.out.println("Error in createClassLoaderByName");
+			return new ReconstructionClassLoader(nodeName);
+		}
+	}
+	
+	public ReconstructionClassLoader createClassLoaderByCl(ReconstructionClassLoader cl){
+		if (curClassLoader == MiddleWareConfig.RECONSTRUCTION_CLASSLOADER){
+			return new ReconstructionClassLoader(cl);
+		}
+		else if (curClassLoader == MiddleWareConfig.EXT_RECONSTRUCTION_CLASSLOADER){
+			return new ExtReconstructionClassLoader(cl);
+		}
+		else{
+			System.out.println("Error in createClassLoaderByCl");
+			return new ReconstructionClassLoader(cl);
+		}
 	}
 
 	public String getCurMiddleWareHome() {

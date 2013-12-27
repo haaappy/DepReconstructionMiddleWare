@@ -61,7 +61,8 @@ public class DependencyManager {
 		// add the new deploymentNode
 		for (String nodeName: addDepMap.keySet()){
 			DeploymentNode node = new DeploymentNode(nodeName);
-			node.setClassLoader(new ReconstructionClassLoader(nodeName));
+			// replace //node.setClassLoader(new ReconstructionClassLoader(nodeName));
+			node.setClassLoader(MiddleWareConfig.getInstance().createClassLoaderByName(nodeName));
 			nodeMap.put(nodeName, node);
 		}
 		
@@ -98,12 +99,14 @@ public class DependencyManager {
 		((ReconstructionClassLoader)curNode.getClassLoader()).removeParentByName(depName);
 		((ReconstructionClassLoader)curNode.getClassLoader()).addParentByClassLoader(depNode.getClassLoader());
 		// import !!!   change the classloader, but the really classloader is the same.
-		curNode.setClassLoader(new ReconstructionClassLoader((ReconstructionClassLoader)curNode.getClassLoader()));
+		// replace //curNode.setClassLoader(new ReconstructionClassLoader((ReconstructionClassLoader)curNode.getClassLoader()));
+		curNode.setClassLoader(MiddleWareConfig.getInstance().createClassLoaderByCl((ReconstructionClassLoader)curNode.getClassLoader()));
 	}
 	
 	public void reconstructMainClassLoader(String mainNodeName){
 		DeploymentNode mainNode = nodeMap.get(mainNodeName);
-		mainNode.setClassLoader(new ReconstructionClassLoader((ReconstructionClassLoader)mainNode.getClassLoader()));
+		// replace //mainNode.setClassLoader(new ReconstructionClassLoader((ReconstructionClassLoader)mainNode.getClassLoader()));
+		mainNode.setClassLoader(MiddleWareConfig.getInstance().createClassLoaderByCl((ReconstructionClassLoader)mainNode.getClassLoader()));
 	}
 	
 }
