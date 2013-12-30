@@ -12,4 +12,6 @@ public interface XMLFinalField {
 	public static final String MAIN_ClASS = "MainClass";
 	public static final String DEPENDENCY = "Dependency";
 	public static final String INVOKE_MAIN_NODE = "InvokeMainNode";
+	
+	public static final String LAST_HOME = "LastHome";
 }

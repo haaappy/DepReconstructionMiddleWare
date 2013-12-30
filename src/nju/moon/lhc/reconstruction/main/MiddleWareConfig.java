@@ -81,7 +81,7 @@ public class MiddleWareConfig {
 			
 			setManagersByCurDeploymentWay(configResults[1]);
 			
-			
+			setIsRunning(true);
 			// TODO  the managers need to change 
 			// the way deals with how to new the object
 			
@@ -187,11 +187,11 @@ public class MiddleWareConfig {
 		DefaultClassLoader = defaultClassLoaderWay;
 	}
 
-	public boolean isRunning() {
+	public boolean getIsRunning() {
 		return isRunning;
 	}
 
-	public void setRunning(boolean isRunning) {
+	public void setIsRunning(boolean isRunning) {
 		this.isRunning = isRunning;
 	}
 	

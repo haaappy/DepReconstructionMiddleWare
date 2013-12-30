@@ -46,7 +46,7 @@ abstract public class VFSManager {
 		@Override
 		public void run(){
 			try{
-				while(true){
+				while(MiddleWareConfig.getInstance().getIsRunning()){
 					Thread.sleep(5000);
 					
 					System.out.println("The time is: " + new Date().toString() + " and scan is start!");

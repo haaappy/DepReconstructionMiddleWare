@@ -55,11 +55,12 @@ public class XMLWriter {
 		}     
     }
 	
-	public static void xmlUpdateCurValue(String filePathName, String curHomeValue, String curWayValue){
+	public static void xmlUpdateCurValue(String filePathName, String curHomeValue, String curWayValue, String curClassLoaderValue){
 		if (filePathName.endsWith("config.xml")){
 			Document doc = loadXMLFile(filePathName);
 			xmlUpdateTagValue(doc, XMLFinalField.CUR_HOME, curHomeValue);
 			xmlUpdateTagValue(doc, XMLFinalField.CUR_DEPLOYMENT_WAY, curWayValue);
+			xmlUpdateTagValue(doc, XMLFinalField.CUR_CLASSLOADER, curClassLoaderValue);
 			doc2XmlFile(doc, filePathName);
 		}
 		else{
@@ -67,11 +68,12 @@ public class XMLWriter {
 		}		
 	}
 	
-	public static void xmlUpdateDefaultValue(String filePathName, String defaultHomeValue, String defaultWayValue){
+	public static void xmlUpdateDefaultValue(String filePathName, String defaultHomeValue, String defaultWayValue, String defaultClassLoaderValue){
 		if (filePathName.endsWith("config.xml")){
 			Document doc = loadXMLFile(filePathName);
 			xmlUpdateTagValue(doc, XMLFinalField.DEFAULT_HOME, defaultHomeValue);
 			xmlUpdateTagValue(doc, XMLFinalField.DEFAULT_DEPLOYMENT_WAY, defaultWayValue);
+			xmlUpdateTagValue(doc, XMLFinalField.DEFAULT_CLASSLOADER, defaultClassLoaderValue);
 			doc2XmlFile(doc, filePathName);
 		}
 		else{
@@ -79,10 +81,22 @@ public class XMLWriter {
 		}		
 	}
 	
+	public static void xmlUpdateLastHomeValue(String filePathName, String lastHomeValue){
+		if (filePathName.endsWith("lasthome.xml")){
+			Document doc = loadXMLFile(filePathName);
+			xmlUpdateTagValue(doc, XMLFinalField.LAST_HOME, lastHomeValue);
+			doc2XmlFile(doc, filePathName);
+		}
+		else{
+			System.out.println("filePathName = " + filePathName + ". It is not lasthome.xml in xmlUpdateLastHomeValue" );
+		}	
+	}
+	
+	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		xmlUpdateCurValue(MiddleWareConfig.DEFAULT_HOME + "config.xml", "1212", "sdffas");
+		xmlUpdateCurValue(MiddleWareConfig.DEFAULT_HOME + "config.xml", "1212", "sdffas", "Rec");
 	}
 
 }

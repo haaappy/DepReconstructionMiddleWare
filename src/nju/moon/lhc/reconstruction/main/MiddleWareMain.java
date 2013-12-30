@@ -22,12 +22,21 @@ public class MiddleWareMain {
 	 */
 	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException, SecurityException, NoSuchMethodException {
 		// TODO Auto-generated method stub
-		MiddleWareConfig.getNewInstance(MiddleWareConfig.DEFAULT_HOME);
+		if (args != null && args.length == 1){
+			MiddleWareConfig.getNewInstance(args[0]);
+		}
+		else{
+			MiddleWareConfig.getNewInstance(MiddleWareConfig.DEFAULT_HOME);
+		}		
 		
 		MiddleWareConfig.getInstance().getDepManager().createDependencyGraph();
 		//DependencyManager.getInstance().createDependencyGraph();
 		
 		executeAllMainMethode();
+	}
+	
+	public static void stop(){
+		MiddleWareConfig.getInstance().setIsRunning(false);
 	}
 	
 	
