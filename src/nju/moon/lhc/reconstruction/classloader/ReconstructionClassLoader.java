@@ -12,42 +12,46 @@ public class ReconstructionClassLoader extends ClassLoader {
 	protected String classLoaderName;
 	protected ArrayList<ClassLoader> parents;
 	protected String rootName;
-	public static final String ROOT_DIR = "/home/happy/JBOSS/OSGI-TEST-DEPLOYMENT/";
+	protected String rootDir = "/home/happy/JBOSS/OSGI-TEST-DEPLOYMENT/";
 	public static final String DEFAULT_NAME = "A-JAR";
 	
-	public ReconstructionClassLoader(ArrayList<ClassLoader> parents, String classLoaderName){
+	public ReconstructionClassLoader(String rootDir, ArrayList<ClassLoader> parents, String classLoaderName){
+		this.rootDir = rootDir;
 		this.parents = new ArrayList<ClassLoader>();
 		this.parents.addAll(parents);
 		this.setClassLoaderName(classLoaderName);
-		this.rootName = ROOT_DIR + classLoaderName;
+		this.rootName = rootDir + classLoaderName;
 	}
 	
-	public ReconstructionClassLoader(ClassLoader parent, String classLoaderName){
+	public ReconstructionClassLoader(String rootDir, ClassLoader parent, String classLoaderName){
+		this.rootDir = rootDir;
 		this.parents = new ArrayList<ClassLoader>();
 		this.parents.add(parent);
 		this.setClassLoaderName(classLoaderName);
-		this.rootName = ROOT_DIR + classLoaderName;
+		this.rootName = rootDir + classLoaderName;
 	}
 	
-	public ReconstructionClassLoader(String classLoaderName){
+	public ReconstructionClassLoader(String rootDir, String classLoaderName){
+		this.rootDir = rootDir;
 		this.parents = new ArrayList<ClassLoader>();
 		//this.parents.add(this.getParent());
 		this.setClassLoaderName(classLoaderName);
-		this.rootName = ROOT_DIR + classLoaderName;
+		this.rootName = rootDir + classLoaderName;
 	}
 	
 	public ReconstructionClassLoader(ReconstructionClassLoader cl){
+		this.rootDir = cl.rootDir;
 		this.parents = new ArrayList<ClassLoader>();
 		this.parents.addAll(cl.parents);
 		this.setClassLoaderName(cl.getClassLoaderName());
-		this.rootName = ROOT_DIR + classLoaderName;
+		this.rootName = this.rootDir + classLoaderName;
 	}
 	
 	public ReconstructionClassLoader(){
 		this.parents = new ArrayList<ClassLoader>();
 		//this.parents.add(this.getParent());
 		this.setClassLoaderName(DEFAULT_NAME);
-		this.rootName = ROOT_DIR + DEFAULT_NAME;
+		this.rootName = rootDir + DEFAULT_NAME;
 	}
 	
 	public String getClassLoaderName() {
@@ -138,7 +142,7 @@ public class ReconstructionClassLoader extends ClassLoader {
 	}
 	
 	protected String classNameToPath(String className){
-		return rootName + File.separator+className.replace('.', File.separatorChar)+".class";
+		return rootName + File.separator + className.replace('.', File.separatorChar)+".class";
 	}
 
 	

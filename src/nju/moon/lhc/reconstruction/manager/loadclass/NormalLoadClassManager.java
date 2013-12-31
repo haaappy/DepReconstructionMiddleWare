@@ -6,7 +6,6 @@ import java.util.HashSet;
 
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.manager.dependency.DeploymentNode;
-import nju.moon.lhc.reconstruction.manager.vfs.VFSManager;
 
 public class NormalLoadClassManager extends LoadClassManager {
 

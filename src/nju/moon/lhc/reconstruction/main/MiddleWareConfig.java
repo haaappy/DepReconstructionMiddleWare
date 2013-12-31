@@ -99,30 +99,30 @@ public class MiddleWareConfig {
 		setDepManager(new DependencyManager());
 		if (way.equals("Normal")){
 			setLcManager(new NormalLoadClassManager());
-			setVfsManager(new NormalVFSManager());
+			setVfsManager(new NormalVFSManager(curMiddleWareHome));
 		}
 		else if (way.equals("Jar")){
 			setLcManager(new JarLoadClassManager());
-			setVfsManager(new JarVFSManager());
+			setVfsManager(new JarVFSManager(curMiddleWareHome));
 		}
 		else{
 			System.out.println("Error in initConfig in setManagersByCurDeploymentWay. ");		
 			setLcManager(new NormalLoadClassManager());
-			setVfsManager(new NormalVFSManager());
+			setVfsManager(new NormalVFSManager(curMiddleWareHome));
 		}
 		
 	}
 	
 	public ReconstructionClassLoader createClassLoaderByName(String nodeName){
 		if (curClassLoader == MiddleWareConfig.RECONSTRUCTION_CLASSLOADER){
-			return new ReconstructionClassLoader(nodeName);
+			return new ReconstructionClassLoader(curMiddleWareHome, nodeName);
 		}
 		else if (curClassLoader == MiddleWareConfig.EXT_RECONSTRUCTION_CLASSLOADER){
-			return new ExtReconstructionClassLoader(nodeName);
+			return new ExtReconstructionClassLoader(curMiddleWareHome, nodeName);
 		}
 		else{
 			System.out.println("Error in createClassLoaderByName");
-			return new ReconstructionClassLoader(nodeName);
+			return new ReconstructionClassLoader(curMiddleWareHome, nodeName);
 		}
 	}
 	

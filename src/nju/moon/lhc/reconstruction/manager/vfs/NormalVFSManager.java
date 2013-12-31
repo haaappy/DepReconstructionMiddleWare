@@ -16,14 +16,14 @@ import org.w3c.dom.NodeList;
 
 public class NormalVFSManager extends VFSManager {
 	
-	public NormalVFSManager(){
-		super();
+	public NormalVFSManager(String rootDir){
+		super(rootDir);
 	}
 	
 	@Override
 	protected void initDeploymentSet(){
 		deploymentSet = new HashSet<File>();
-		File file = new File(ROOT_DIR);
+		File file = new File(rootDir);
 		for (File f: file.listFiles()){
 			if (f.isDirectory()){
 				deploymentSet.add(f);
@@ -36,42 +36,13 @@ public class NormalVFSManager extends VFSManager {
 		xmlDependencyInfoMap = new HashMap<String, HashSet<String>>();
 		xmlMainClassInfoMap = new HashMap<String, HashSet<String>>();
 		for (File f: deploymentSet){
-			String filePathName = ROOT_DIR + f.getName() + "/" + f.getName() + ".xml";
+			String filePathName = rootDir + f.getName() + "/" + f.getName() + ".xml";
 			// HashSet<String> dependencySet = readDependencyXMLFile(filePathName);
 			xmlDependencyInfoMap.put(f.getName(), XMLReader.readInfoByXMLFile(filePathName, XMLFinalField.DEPENDENCY));
 			xmlMainClassInfoMap.put(f.getName(), XMLReader.readInfoByXMLFile(filePathName, XMLFinalField.MAIN_ClASS));
 		}
 	}
-	
-	// if there is not xml file in it, return hash set which size is 0
-	@Override
-	protected HashSet<String> readInfoByXMLFile(String filePathName, String tagInfo){
-		HashSet<String> result = new HashSet<String>();
-		try{		
-			File xmlFile = new File(filePathName);
-			if (!xmlFile.exists()){
-				System.out.println("ERORR! "+ filePathName + " XML file does not exisit!");
-				return result;
-			}
-			else{			
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder builder = factory.newDocumentBuilder();
-				Document doc = builder.parse(xmlFile);
-				NodeList nl = doc.getElementsByTagName(tagInfo);
-				for (int i=0; i<nl.getLength(); i++){
-					//System.out.println(doc.getElementsByTagName("Dependency").item(i).getTextContent());
-					result.add(doc.getElementsByTagName(tagInfo).item(i).getTextContent());
-				}
-				return result;
-			}
-			
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return result;
-		}
-	}	
-	
+
 	
 	// the action that vfs remove the file 
 	@Override
@@ -126,8 +97,8 @@ public class NormalVFSManager extends VFSManager {
 		HashMap<String, HashSet<String>> addMainMap = new HashMap<String, HashSet<String>>();
 		
 		for (String fileName: addSet){
-			deploymentSet.add(new File(ROOT_DIR + fileName));
-			String xmlFilePathName = ROOT_DIR + fileName + "/" + fileName + ".xml";
+			deploymentSet.add(new File(rootDir + fileName));
+			String xmlFilePathName = rootDir + fileName + "/" + fileName + ".xml";
 			HashSet<String> parentSet = XMLReader.readInfoByXMLFile(xmlFilePathName, XMLFinalField.DEPENDENCY);
 			addDepMap.put(fileName, parentSet);
 			HashSet<String> mainSet = XMLReader.readInfoByXMLFile(xmlFilePathName, XMLFinalField.MAIN_ClASS);
@@ -155,7 +126,7 @@ public class NormalVFSManager extends VFSManager {
 	// get the update or add File in the OSGI-TEST-DEPLOYMENT  (modify time is changed)
 	@Override
 	protected HashSet<String> getAllChangedFileName(){
-		File file = new File(ROOT_DIR);
+		File file = new File(rootDir);
 		File[] files = file.listFiles();
 		HashSet<String> changedFileSet = new HashSet<String>();
 		for (File f: files){

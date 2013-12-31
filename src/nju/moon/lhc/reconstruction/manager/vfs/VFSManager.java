@@ -21,7 +21,7 @@ import org.w3c.dom.NodeList;
 
 abstract public class VFSManager {
 
-	public static final String ROOT_DIR = "/home/happy/JBOSS/OSGI-TEST-DEPLOYMENT/";
+	protected String rootDir = "/home/happy/JBOSS/OSGI-TEST-DEPLOYMENT/";
 	
 	protected HashSet<File> deploymentSet;
 	protected HashMap<String, HashSet<String>> xmlDependencyInfoMap;
@@ -36,7 +36,8 @@ abstract public class VFSManager {
 //		return SingletonHolder.INSTANCE;
 //	}
 	
-	public VFSManager(){
+	public VFSManager(String rootDir){
+		this.rootDir = rootDir;
 		initDeploymentSet();
 		readAllXMLInfo();
 		new PollingThread().start();
@@ -67,7 +68,7 @@ abstract public class VFSManager {
 					//LoadClassManager.getInstance().loadClassByDeploymentNameSet(updateSet);
 					// execute
 					for (String nodeName: updateSet){
-						for (String mainNodeName: XMLReader.readInfoByXMLFile(ROOT_DIR + nodeName + "/" + nodeName + ".xml", XMLFinalField.INVOKE_MAIN_NODE)){
+						for (String mainNodeName: XMLReader.readInfoByXMLFile(rootDir + nodeName + "/" + nodeName + ".xml", XMLFinalField.INVOKE_MAIN_NODE)){
 							MiddleWareMain.executeMainMethodByNode(mainNodeName);
 						}	
 					}
@@ -100,7 +101,7 @@ abstract public class VFSManager {
 	abstract protected void readAllXMLInfo();
 	
 	// if there is not xml file in it, return hash set which size is 0
-	abstract protected HashSet<String> readInfoByXMLFile(String filePathName, String tagInfo);	
+	//abstract protected HashSet<String> readInfoByXMLFile(String filePathName, String tagInfo);	
 	
 	
 	//*************  important  *********************************

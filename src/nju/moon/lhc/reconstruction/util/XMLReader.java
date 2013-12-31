@@ -1,7 +1,10 @@
 package nju.moon.lhc.reconstruction.util;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.HashSet;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -87,7 +90,33 @@ public class XMLReader {
 		}
 	}
 	
+	// It is used for Jar File configure xml
+	public static HashSet<String> readInfoByXMLFileFromJar(String jarPath, String xmlName, String tagInfo){
+		HashSet<String> result = new HashSet<String>();
+		try{		
+			ZipFile zf = new ZipFile(jarPath);
+			ZipEntry ze = zf.getEntry(xmlName);
+			InputStream ins = zf.getInputStream(ze);	
+			
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(ins);
+			NodeList nl = doc.getElementsByTagName(tagInfo);
+			for (int i=0; i<nl.getLength(); i++){
+				//System.out.println(doc.getElementsByTagName("Dependency").item(i).getTextContent());
+				result.add(doc.getElementsByTagName(tagInfo).item(i).getTextContent());
+			}
+			ins.close();
+			return result;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return result;
+		}
+		
+	}
+	
 	public static void main(String[] args){
-		System.out.println(readInfoByConfigXMLFile(MiddleWareConfig.DEFAULT_HOME + "config.xml", "CurHome"));
+		System.out.println(readInfoByXMLFileFromJar(MiddleWareConfig.DEFAULT_HOME + "A-JAR.jar", "A-JAR.xml", "Dependency"));
 	}
 }
