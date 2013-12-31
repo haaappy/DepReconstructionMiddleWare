@@ -43,51 +43,20 @@ public class NormalVFSManager extends VFSManager {
 		}
 	}
 
-	
-	// the action that vfs remove the file 
+	// get the update or add File in the OSGI-TEST-DEPLOYMENT  (modify time is changed)
 	@Override
-	protected void removeAction(HashSet<String> rmvSet){   	
-		// remove the 'deploymetSet'
-		HashSet<File> delSet = new HashSet<File>();
-		for (File f: deploymentSet){
-			if (rmvSet.contains(f.getName())){
-				delSet.add(f);
+	protected HashSet<String> getAllChangedFileName(){
+		File file = new File(rootDir);
+		File[] files = file.listFiles();
+		HashSet<String> changedFileSet = new HashSet<String>();
+		for (File f: files){
+			if (f.isDirectory() && f.lastModified() + 6000 > System.currentTimeMillis()){
+				changedFileSet.add(f.getName());
 			}
 		}
-		deploymentSet.removeAll(delSet);
-		// get the remove dependency
-		HashMap<String, HashSet<String>> rmvDepMap = getRemoveDependency(rmvSet);
-		// remove the 'xmlDependencyInfoMap' and 'xmlMainClassInfoMap'
-		for (String rmvDepName: rmvDepMap.keySet()){
-			xmlDependencyInfoMap.remove(rmvDepName);
-			xmlMainClassInfoMap.remove(rmvDepName);
-		}
-		// rmvDepList  ==>   key: A    value  [B, C]     remove the child named A in  B and C   finally remove A
-		MiddleWareConfig.getInstance().getDepManager().modifyDeploymentNodeByRmvDepMap(rmvDepMap);		
+		return changedFileSet;
 	}
 	
-	// get the file that disappear in the OSGI-TEST-DEPLOYMENT
-	@Override
-	protected HashSet<String> getRemoveFileName(){
-		HashSet<String> rmvSet = new HashSet<String>();		
-		for (File f: deploymentSet){
-			String path =  f.getPath();
-			if (new File(path).exists() == false){
-				rmvSet.add(f.getName());
-			}
-		}
-		return rmvSet;
-	}
-	
-	// get the remove dependency from xmlInfoMap
-	@Override
-	protected HashMap<String, HashSet<String>> getRemoveDependency(HashSet<String> rmvSet){
-		HashMap<String, HashSet<String>> rmvDepMap = new HashMap<String, HashSet<String>>();
-		for (String rmvName: rmvSet){
-			rmvDepMap.put(rmvName, xmlDependencyInfoMap.get(rmvName));
-		}
-		return rmvDepMap;
-	}
 	
 	// the action that vfs add the file
 	@Override
@@ -109,56 +78,4 @@ public class NormalVFSManager extends VFSManager {
 		// add the new nodeMap and the dependency
 		MiddleWareConfig.getInstance().getDepManager().addDeploymentNodeByAddDepMap(addDepMap);			
 	}
-		
-	// the action that vfs update the file
-	@Override
-	protected void updateAction(HashSet<String> updateSet){
-		// first remove the old version
-		removeAction(updateSet);
-		// second add the new version
-		// add the add file names in the update set
-		updateSet.addAll(getAddFileName());				
-		// add action if the file adds and update		
-		addAction(updateSet);		
-	}
-	
-	
-	// get the update or add File in the OSGI-TEST-DEPLOYMENT  (modify time is changed)
-	@Override
-	protected HashSet<String> getAllChangedFileName(){
-		File file = new File(rootDir);
-		File[] files = file.listFiles();
-		HashSet<String> changedFileSet = new HashSet<String>();
-		for (File f: files){
-			if (f.isDirectory() && f.lastModified() + 6000 > System.currentTimeMillis()){
-				changedFileSet.add(f.getName());
-			}
-		}
-		return changedFileSet;
-	}
-	
-	// get the update File in the OSGI-TEST-DEPLOYMENT
-	@Override
-	protected HashSet<String> getUpdateFileName(){
-		HashSet<String> updateFileSet = new HashSet<String>();
-		for (String fileName: getAllChangedFileName()){
-			for (File file: deploymentSet){
-				if (file.getName().equals(fileName)){
-					updateFileSet.add(fileName);
-				}
-			}
-		}
-		return updateFileSet;
-	}
-		
-	// get the add File in the OSGI-TEST-DEPLOYMENT
-	@Override
-	protected HashSet<String> getAddFileName(){
-		HashSet<String> addFileSet = getAllChangedFileName();
-		addFileSet.removeAll(getUpdateFileName());   // remove update file set and the rest is add file set
-		return addFileSet;
-	}
-
-	
-	
 }
