@@ -5,7 +5,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
+import nju.moon.lhc.reconstruction.main.MiddleWareMain;
 
 public class ReconstructionClassLoader extends ClassLoader {
 
@@ -117,12 +123,29 @@ public class ReconstructionClassLoader extends ClassLoader {
 			return null;
 		}
 		else{
+			if (MiddleWareMain.application != null){
+				MiddleWareMain.application.setLoadedClass(name, null);
+			}
 			return defineClass(name, classData, 0, classData.length);
 		}
 	}
 	
 	protected byte[] getClassData(String className){
-		String path = classNameToPath(className);
+		int way = MiddleWareConfig.getInstance().getCurClassLoaderWay();
+		if (way == MiddleWareConfig.DEPLOY_WAY_NORMAL){
+			return getClassDataNormalWay(className);
+		}
+		else if (way == MiddleWareConfig.DEPLOY_WAY_JAR){
+			return getClassDataJarWay(className);
+		}
+		else{
+			return getClassDataNormalWay(className);
+		}
+		
+	}
+	
+	protected byte[] getClassDataNormalWay(String className){
+		String path = classNameToPathNormalWay(className);
 		try{
 			InputStream ins = new FileInputStream(path);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -138,11 +161,43 @@ public class ReconstructionClassLoader extends ClassLoader {
 			//e.printStackTrace();   exception and return null
 		}
 		return null;
-		
 	}
 	
-	protected String classNameToPath(String className){
+	protected String classNameToPathNormalWay(String className){
 		return rootName + File.separator + className.replace('.', File.separatorChar)+".class";
+	}
+	
+	
+	protected byte[] getClassDataJarWay(String className){
+		String path = classNameToPathJarWay(className);
+		try{
+			ZipFile zf = new ZipFile(rootDir + classLoaderName + ".jar");
+			ZipEntry ze = zf.getEntry(path);
+					
+			try{
+      			InputStream ins = zf.getInputStream(ze);
+      			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      			int bufferSize = 4096;
+      			byte[] buffer = new byte[bufferSize];
+      			int bytesNumRead = 0;
+      			while ((bytesNumRead = ins.read(buffer))!=-1){
+      				baos.write(buffer, 0, bytesNumRead);
+      			}
+      			ins.close();
+      			return baos.toByteArray();
+      		}catch(IOException e){
+      			e.printStackTrace();  // exception and return null
+      		}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+			
+		return null;
+	}
+	
+	protected String classNameToPathJarWay(String className){    //   XX/XX/XXXX.class
+		return  className.replace('.', File.separatorChar)+".class";
 	}
 
 	

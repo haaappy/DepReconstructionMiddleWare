@@ -5,6 +5,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.jdesktop.application.Application;
+
+import nju.moon.lhc.reconstruction.gui.DepRestructionMiddleWareApplication;
 import nju.moon.lhc.reconstruction.manager.dependency.DependencyManager;
 import nju.moon.lhc.reconstruction.manager.loadclass.LoadClassManager;
 import nju.moon.lhc.reconstruction.manager.vfs.VFSManager;
@@ -20,6 +23,9 @@ public class MiddleWareMain {
 	 * @throws NoSuchMethodException 
 	 * @throws SecurityException 
 	 */
+	
+	public static DepRestructionMiddleWareApplication application = null;
+	
 	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException, SecurityException, NoSuchMethodException {
 		// TODO Auto-generated method stub
 		if (args != null && args.length == 1){
@@ -37,6 +43,10 @@ public class MiddleWareMain {
 	
 	public static void stop(){
 		MiddleWareConfig.getInstance().setIsRunning(false);
+	}
+	
+	public static void setApplication(DepRestructionMiddleWareApplication app){
+		application = app;
 	}
 	
 	

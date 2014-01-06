@@ -73,7 +73,8 @@ public class JarVFSManager extends VFSManager {
 		File[] files = file.listFiles();
 		HashSet<String> changedFileSet = new HashSet<String>();
 		for (File f: files){
-			if (!f.isDirectory() && f.getName().indexOf(".jar")>0 && f.lastModified() + 6000 > System.currentTimeMillis()){
+			if (!f.isDirectory() && f.getName().indexOf(".jar")>0 && 
+					f.lastModified() + MiddleWareConfig.getInstance().getCurPollingTime() > System.currentTimeMillis()){
 				changedFileSet.add(f.getName());
 			}
 		}

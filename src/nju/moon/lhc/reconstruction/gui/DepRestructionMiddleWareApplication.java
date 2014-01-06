@@ -7,12 +7,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.HashSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -87,6 +89,8 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     private JMenuItem jMenuItem4;
     private JMenuItem jMenuItem3;
     private JMenuItem jMenuItemStop;
+    private JComboBox jComboBox2;
+    private JLabel jLabel3;
     private JMenuItem jMenuItemStart;
     private JMenu jMenu3;
     private JList jList1;
@@ -133,12 +137,12 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	}
         topPanel = new JPanel();
         topPanel.setLayout(null);
-        topPanel.setPreferredSize(new java.awt.Dimension(708, 284));
+        topPanel.setPreferredSize(new java.awt.Dimension(783, 319));
         {
         	jPanel1 = new JPanel();
         	getMainFrame().getContentPane().add(jPanel1, BorderLayout.NORTH);
         	jPanel1.setLayout(null);
-        	jPanel1.setPreferredSize(new java.awt.Dimension(708, 221));
+        	jPanel1.setPreferredSize(new java.awt.Dimension(783, 255));
         	getButtonGroup1();
         	jPanel1.add(getJRadioButton1());
         	jPanel1.add(getJRadioButton2());
@@ -156,6 +160,8 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
         	jPanel1.add(getjButtonChooseHome());
         	jPanel1.add(getJButtonStart());
         	jPanel1.add(getJButtonStop());
+        	jPanel1.add(getJLabel3x());
+        	jPanel1.add(getJComboBox2());
         }
         topPanel.add(getJLabel4());
         topPanel.add(getJLabel5());
@@ -164,6 +170,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
         show(topPanel);
         
         initDefaultValue();
+        MiddleWareMain.setApplication(this);   
     }
     
     private void initDefaultValue() {
@@ -176,29 +183,35 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	jTextFieldFilePath.setText(lastHome);
 
     	String[] configResults = XMLReader.readAllInfoByConfigXMLFile(lastHome + "config.xml");
-    	if (configResults != null && configResults.length == 6){
-    		if (configResults[4].equals("Jar")){
+    	if (configResults != null && configResults.length == 8){
+    		if (configResults[5].equals("Jar")){
     			jRadioButton2.setSelected(true);
     		}
     		else{
     			jRadioButton1.setSelected(true);
     		}
     		
-    		if (configResults[5].equals("ExtReconstructionClassLoader")){
-    			jComboBox1.setSelectedItem("ExtReconstructionClassLoader");
-    		}
-    		else{
-    			jComboBox1.setSelectedItem("ReconstructionClassLoader");
-    		}
+    		jComboBox1.setSelectedItem(configResults[6]);
+    		jComboBox2.setSelectedItem(configResults[7]);
+    		
     	}
     	else{
     		jRadioButton1.setSelected(true);
-    		jComboBox1.setSelectedItem("ReconstructionClassLoader");	
+    		jComboBox1.setSelectedItem("ReconstructionClassLoader");
+    		jComboBox2.setSelectedItem("5000ms");
     	}
     	
     	
 		
 	}
+    
+    public void setLoadedClass(String className, Date date){
+    	DefaultListModel dm = (DefaultListModel) jList1.getModel();
+    	if (dm.indexOf(className) < 0){
+    		dm.addElement(className);
+    	}
+    	jList1.setModel(dm);
+    }
 
 
 
@@ -223,7 +236,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jTextFieldHome == null) {
     		jTextFieldHome = new JTextField();
     		jTextFieldHome.setName("jTextFieldHome");
-    		jTextFieldHome.setBounds(16, 82, 622, 28);
+    		jTextFieldHome.setBounds(16, 117, 622, 28);
     		jTextFieldHome.setEditable(false);
     	}
     	return jTextFieldHome;
@@ -234,7 +247,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jLabel1 = new JLabel();
     		jLabel1.setLayout(null);
     		jLabel1.setName("jLabel1");
-    		jLabel1.setBounds(16, 51, 158, 25);
+    		jLabel1.setBounds(16, 86, 158, 25);
     	}
     	return jLabel1;
     }
@@ -270,7 +283,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jTextFieldFilePath == null) {
     		jTextFieldFilePath = new JTextField();
     		jTextFieldFilePath.setName("jTextFieldFilePath");
-    		jTextFieldFilePath.setBounds(16, 147, 621, 28);
+    		jTextFieldFilePath.setBounds(16, 182, 621, 28);
     	}
     	return jTextFieldFilePath;
     }
@@ -279,7 +292,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jLabel2 == null) {
     		jLabel2 = new JLabel();
     		jLabel2.setName("jLabel2");
-    		jLabel2.setBounds(16, 117, 83, 25);
+    		jLabel2.setBounds(16, 152, 83, 25);
     	}
     	return jLabel2;
     }
@@ -288,7 +301,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jButtonChooseFile == null) {
     		jButtonChooseFile = new JButton();
     		jButtonChooseFile.setName("jButtonChooseFile");
-    		jButtonChooseFile.setBounds(655, 146, 110, 30);
+    		jButtonChooseFile.setBounds(655, 181, 110, 30);
     		jButtonChooseFile.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
     				System.out.println("jButtonChooseFile.actionPerformed, event="+evt);
@@ -326,7 +339,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jButtonAdd == null) {
     		jButtonAdd = new JButton();
     		jButtonAdd.setName("jButtonAdd");
-    		jButtonAdd.setBounds(16, 182, 85, 30);
+    		jButtonAdd.setBounds(16, 217, 85, 30);
     	}
     	return jButtonAdd;
     }
@@ -335,7 +348,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jButtonRemove == null) {
     		jButtonRemove = new JButton();
     		jButtonRemove.setName("jButtonRemove");
-    		jButtonRemove.setBounds(120, 182, 85, 30);
+    		jButtonRemove.setBounds(120, 217, 85, 30);
     	}
     	return jButtonRemove;
     }
@@ -344,7 +357,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jLabelState == null) {
     		jLabelState = new JLabel();
     		jLabelState.setName("jLabelState");
-    		jLabelState.setBounds(18, 16, 181, 25);
+    		jLabelState.setBounds(16, 21, 181, 25);
     	}
     	return jLabelState;
     }
@@ -371,11 +384,10 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     private JList getJList1() {
     	if(jList1 == null) {
     		ListModel jList1Model = 
-    				new DefaultComboBoxModel(
-    						new String[] { "ReconstructionClassLoader", "ExtReconstructionClassLoader" });
+    				new DefaultListModel();
     		jList1 = new JList();
     		jList1.setModel(jList1Model);
-    		jList1.setBounds(460, 38, 311, 290);
+    		jList1.setBounds(460, 38, 311, 264);
     	}
     	return jList1;
     }
@@ -455,9 +467,8 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     private JButton getjButtonChooseHome() {
     	if(jButtonChooseHome == null) {
     		jButtonChooseHome = new JButton();
-    		jButtonChooseHome.setBounds(655, 79, 107, 30);
+    		jButtonChooseHome.setBounds(655, 114, 107, 30);
     		jButtonChooseHome.setName("jButtonChooseHome");
-    		jButtonChooseHome.setSize(110, 30);
     		jButtonChooseHome.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
     				System.out.println("jButtonChooseHome.actionPerformed, event="+evt);
@@ -509,12 +520,14 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     				String curHomeValue = jTextFieldHome.getText();
     				String curWayValue = jRadioButton1.isSelected() ? "Normal" : "Jar";
     				String curClassLoaderValue = jComboBox1.getSelectedItem().toString();
+    				String curPollingTimeValue = jComboBox2.getSelectedItem().toString();
     				
-    				XMLWriter.xmlUpdateCurValue(curHomeValue + "config.xml", curHomeValue, curWayValue, curClassLoaderValue);
+    				XMLWriter.xmlUpdateCurValue(curHomeValue + "config.xml", curHomeValue, curWayValue, curClassLoaderValue, curPollingTimeValue);
     				XMLWriter.xmlUpdateLastHomeValue("lasthome.xml", curHomeValue);
     				
 					try {
 						MiddleWareMain.main(new String[]{curHomeValue});
+  
 					} catch (IllegalArgumentException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -567,6 +580,27 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		});
     	}
     	return jButtonStop;
+    }
+    
+    private JLabel getJLabel3x() {
+    	if(jLabel3 == null) {
+    		jLabel3 = new JLabel();
+    		jLabel3.setBounds(359, 83, 98, 18);
+    		jLabel3.setName("jLabel3");
+    	}
+    	return jLabel3;
+    }
+    
+    private JComboBox getJComboBox2() {
+    	if(jComboBox2 == null) {
+    		ComboBoxModel jComboBox2Model = 
+    				new DefaultComboBoxModel(
+    						new String[] { "2000ms", "5000ms", "8000ms" });
+    		jComboBox2 = new JComboBox();
+    		jComboBox2.setModel(jComboBox2Model);
+    		jComboBox2.setBounds(479, 78, 292, 28);
+    	}
+    	return jComboBox2;
     }
 
 }

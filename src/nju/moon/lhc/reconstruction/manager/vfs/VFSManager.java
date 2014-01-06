@@ -48,7 +48,7 @@ abstract public class VFSManager {
 		public void run(){
 			try{
 				while(MiddleWareConfig.getInstance().getIsRunning()){
-					Thread.sleep(5000);
+					Thread.sleep(MiddleWareConfig.getInstance().getCurPollingTime());
 					
 					System.out.println("The time is: " + new Date().toString() + " and scan is start!");
 					

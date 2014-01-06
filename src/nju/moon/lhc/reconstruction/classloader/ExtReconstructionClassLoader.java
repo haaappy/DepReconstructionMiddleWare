@@ -64,37 +64,4 @@ public class ExtReconstructionClassLoader extends ReconstructionClassLoader {
 		}
 	}
 	
-	@Override
-	protected byte[] getClassData(String className){
-		String path = classNameToPath(className);
-		try{
-			ZipFile zf = new ZipFile(rootDir + classLoaderName + ".jar");
-			ZipEntry ze = zf.getEntry(path);
-					
-			try{
-      			InputStream ins = zf.getInputStream(ze);
-      			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      			int bufferSize = 4096;
-      			byte[] buffer = new byte[bufferSize];
-      			int bytesNumRead = 0;
-      			while ((bytesNumRead = ins.read(buffer))!=-1){
-      				baos.write(buffer, 0, bytesNumRead);
-      			}
-      			ins.close();
-      			return baos.toByteArray();
-      		}catch(IOException e){
-      			e.printStackTrace();  // exception and return null
-      		}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-			
-		return null;
-	}
-	
-	@Override
-	protected String classNameToPath(String className){    //   XX/XX/XXXX.class
-		return  className.replace('.', File.separatorChar)+".class";
-	}
 }

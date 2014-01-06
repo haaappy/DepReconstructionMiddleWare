@@ -44,16 +44,18 @@ public class XMLReader {
 				return null;
 			}
 			else{
-				String[] configResults = new String[6];
+				String[] configResults = new String[8];
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder builder = factory.newDocumentBuilder();
 				Document doc = builder.parse(xmlFile);
 				configResults[0] = doc.getElementsByTagName(XMLFinalField.CUR_HOME).item(0).getTextContent();
 				configResults[1] = doc.getElementsByTagName(XMLFinalField.CUR_DEPLOYMENT_WAY).item(0).getTextContent();
 				configResults[2] = doc.getElementsByTagName(XMLFinalField.CUR_CLASSLOADER).item(0).getTextContent();
-				configResults[3] = doc.getElementsByTagName(XMLFinalField.DEFAULT_HOME).item(0).getTextContent();
-				configResults[4] = doc.getElementsByTagName(XMLFinalField.DEFAULT_DEPLOYMENT_WAY).item(0).getTextContent();
-				configResults[5] = doc.getElementsByTagName(XMLFinalField.DEFAULT_CLASSLOADER).item(0).getTextContent();
+				configResults[3] = doc.getElementsByTagName(XMLFinalField.CUR_POLLINGTIME).item(0).getTextContent();
+				configResults[4] = doc.getElementsByTagName(XMLFinalField.DEFAULT_HOME).item(0).getTextContent();
+				configResults[5] = doc.getElementsByTagName(XMLFinalField.DEFAULT_DEPLOYMENT_WAY).item(0).getTextContent();
+				configResults[6] = doc.getElementsByTagName(XMLFinalField.DEFAULT_CLASSLOADER).item(0).getTextContent();
+				configResults[7] = doc.getElementsByTagName(XMLFinalField.DEFAULT_POLLINGTIME).item(0).getTextContent();
 				return configResults;
 			}
 		}

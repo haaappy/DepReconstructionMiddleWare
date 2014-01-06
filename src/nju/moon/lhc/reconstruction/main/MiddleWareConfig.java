@@ -17,9 +17,11 @@ public class MiddleWareConfig {
 	private String curMiddleWareHome;
 	private int curDeploymentWay;
 	private int curClassLoader;
+	private int curPollingTime;
 	private String defaultMiddleWareHome;
 	private int defaultDeploymentWay;
 	private int DefaultClassLoader;
+	private int DefaultPollingTime;
 	
 	private boolean isRunning;
 	
@@ -71,13 +73,16 @@ public class MiddleWareConfig {
 	
 	private void initConfig(String curHome){
 		String[] configResults = XMLReader.readAllInfoByConfigXMLFile(curHome + "config.xml");
-		if (configResults != null && configResults.length == 6){
+		if (configResults != null && configResults.length == 8){
 			setCurMiddleWareHome(configResults[0]);
 			setCurDeploymentWayByStr(configResults[1]);
 			setCurClassLoaderByStr(configResults[2]);
-			setDefaultMiddleWareHome(configResults[3]);
-			setDefaultDeploymentWayByStr(configResults[4]);
-			setDefaultClassLoaderByStr(configResults[5]);
+			setCurPollingTime(Integer.parseInt(configResults[3].replaceAll("ms", "")));
+			
+			setDefaultMiddleWareHome(configResults[4]);
+			setDefaultDeploymentWayByStr(configResults[5]);
+			setDefaultClassLoaderByStr(configResults[6]);
+			setDefaultPollingTime(Integer.parseInt(configResults[7].replaceAll("ms", "")));
 			
 			setManagersByCurDeploymentWay(configResults[1]);
 			
@@ -163,6 +168,16 @@ public class MiddleWareConfig {
 		this.curClassLoader = curClassLoaderWay;
 	}
 	
+	public int getCurPollingTime() {
+		return curPollingTime;
+	}
+
+	public void setCurPollingTime(int curPollingTime) {
+		this.curPollingTime = curPollingTime;
+	}
+
+
+	
 	public String getDefaultMiddleWareHome() {
 		return defaultMiddleWareHome;
 	}
@@ -185,6 +200,14 @@ public class MiddleWareConfig {
 
 	public void setDefaultClassLoaderWay(int defaultClassLoaderWay) {
 		DefaultClassLoader = defaultClassLoaderWay;
+	}
+	
+	public int getDefaultPollingTime() {
+		return DefaultPollingTime;
+	}
+
+	public void setDefaultPollingTime(int defaultPollingTime) {
+		DefaultPollingTime = defaultPollingTime;
 	}
 
 	public boolean getIsRunning() {
@@ -271,6 +294,8 @@ public class MiddleWareConfig {
 	public void setVfsManager(VFSManager vfsManager) {
 		this.vfsManager = vfsManager;
 	}
+
+
 
 	
 }

@@ -55,12 +55,13 @@ public class XMLWriter {
 		}     
     }
 	
-	public static void xmlUpdateCurValue(String filePathName, String curHomeValue, String curWayValue, String curClassLoaderValue){
+	public static void xmlUpdateCurValue(String filePathName, String curHomeValue, String curWayValue, String curClassLoaderValue, String curPollingTime){
 		if (filePathName.endsWith("config.xml")){
 			Document doc = loadXMLFile(filePathName);
 			xmlUpdateTagValue(doc, XMLFinalField.CUR_HOME, curHomeValue);
 			xmlUpdateTagValue(doc, XMLFinalField.CUR_DEPLOYMENT_WAY, curWayValue);
 			xmlUpdateTagValue(doc, XMLFinalField.CUR_CLASSLOADER, curClassLoaderValue);
+			xmlUpdateTagValue(doc, XMLFinalField.CUR_POLLINGTIME, curPollingTime);
 			doc2XmlFile(doc, filePathName);
 		}
 		else{
@@ -68,12 +69,13 @@ public class XMLWriter {
 		}		
 	}
 	
-	public static void xmlUpdateDefaultValue(String filePathName, String defaultHomeValue, String defaultWayValue, String defaultClassLoaderValue){
+	public static void xmlUpdateDefaultValue(String filePathName, String defaultHomeValue, String defaultWayValue, String defaultClassLoaderValue, String defaultPollingTime){
 		if (filePathName.endsWith("config.xml")){
 			Document doc = loadXMLFile(filePathName);
 			xmlUpdateTagValue(doc, XMLFinalField.DEFAULT_HOME, defaultHomeValue);
 			xmlUpdateTagValue(doc, XMLFinalField.DEFAULT_DEPLOYMENT_WAY, defaultWayValue);
 			xmlUpdateTagValue(doc, XMLFinalField.DEFAULT_CLASSLOADER, defaultClassLoaderValue);
+			xmlUpdateTagValue(doc, XMLFinalField.DEFAULT_POLLINGTIME, defaultPollingTime);
 			doc2XmlFile(doc, filePathName);
 		}
 		else{
@@ -96,7 +98,7 @@ public class XMLWriter {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		xmlUpdateCurValue(MiddleWareConfig.DEFAULT_HOME + "config.xml", "1212", "sdffas", "Rec");
+		xmlUpdateCurValue(MiddleWareConfig.DEFAULT_HOME + "config.xml", "1212", "sdffas", "Rec", "1000ms");
 	}
 
 }
