@@ -5,8 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Date;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -124,7 +125,7 @@ public class ReconstructionClassLoader extends ClassLoader {
 		}
 		else{
 			if (MiddleWareMain.application != null){
-				MiddleWareMain.application.setLoadedClass(name, null);
+				MiddleWareMain.application.setLoadedClass(name, new Date());			
 			}
 			return defineClass(name, classData, 0, classData.length);
 		}

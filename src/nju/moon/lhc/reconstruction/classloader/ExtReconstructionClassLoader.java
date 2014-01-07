@@ -6,8 +6,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import nju.moon.lhc.reconstruction.main.MiddleWareMain;
 
 public class ExtReconstructionClassLoader extends ReconstructionClassLoader {
 	public ExtReconstructionClassLoader(String rootDir, ArrayList<ClassLoader> parents, String classLoaderName){
@@ -60,6 +63,9 @@ public class ExtReconstructionClassLoader extends ReconstructionClassLoader {
 			return null;
 		}
 		else{
+			if (MiddleWareMain.application != null){
+				MiddleWareMain.application.setLoadedClass(name, new Date());			
+			}
 			return defineClass(name, classData, 0, classData.length);
 		}
 	}

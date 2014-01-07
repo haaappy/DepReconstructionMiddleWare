@@ -25,12 +25,14 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
@@ -38,6 +40,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.main.MiddleWareMain;
@@ -89,11 +93,13 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     private JMenuItem jMenuItem4;
     private JMenuItem jMenuItem3;
     private JMenuItem jMenuItemStop;
+    private JScrollPane jScrollPane_IL;
+    private JScrollPane jScrollPane_IL1;
+    private JTable jTable1;
     private JComboBox jComboBox2;
     private JLabel jLabel3;
     private JMenuItem jMenuItemStart;
     private JMenu jMenu3;
-    private JList jList1;
     private JSplitPane jSplitPane1;
     private JPanel jPanel1;
     private JMenu jMenu2;
@@ -165,8 +171,8 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
         }
         topPanel.add(getJLabel4());
         topPanel.add(getJLabel5());
-        topPanel.add(getJTextArea1());
-        topPanel.add(getJList1());
+        topPanel.add(getJScrollPane_IL1());
+        topPanel.add(getJScrollPane_IL());
         show(topPanel);
         
         initDefaultValue();
@@ -206,11 +212,14 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
 	}
     
     public void setLoadedClass(String className, Date date){
-    	DefaultListModel dm = (DefaultListModel) jList1.getModel();
-    	if (dm.indexOf(className) < 0){
-    		dm.addElement(className);
+    	DefaultTableModel tm = (DefaultTableModel)jTable1.getModel();  	
+    	for (int i=0; i<tm.getRowCount(); i++){
+    		if (tm.getValueAt(i, 0).equals(className)){
+    			tm.setValueAt(date.toLocaleString(), i, 1);
+    			return;
+    		}
     	}
-    	jList1.setModel(dm);
+    	tm.addRow(new Object[]{className, date.toLocaleString()});	
     }
 
 
@@ -265,7 +274,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jTextArea1 == null) {
     		jTextArea1 = new JTextArea();
     		jTextArea1.setName("jTextArea1");
-    		jTextArea1.setBounds(10, 34, 440, 296);
+    		jTextArea1.setBounds(10, 34, 440, 262);
     	}
     	return jTextArea1;
     }
@@ -380,18 +389,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	}
     	return jLabel5;
     }
-    
-    private JList getJList1() {
-    	if(jList1 == null) {
-    		ListModel jList1Model = 
-    				new DefaultListModel();
-    		jList1 = new JList();
-    		jList1.setModel(jList1Model);
-    		jList1.setBounds(460, 38, 311, 264);
-    	}
-    	return jList1;
-    }
-    
+
     private JMenu getJMenu3() {
     	if(jMenu3 == null) {
     		jMenu3 = new JMenu();
@@ -517,6 +515,9 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     				
     				jLabelState.setText("State: Running...");
     				
+    				((DefaultTableModel)jTable1.getModel()).getDataVector().removeAllElements();
+    				
+    				
     				String curHomeValue = jTextFieldHome.getText();
     				String curWayValue = jRadioButton1.isSelected() ? "Normal" : "Jar";
     				String curClassLoaderValue = jComboBox1.getSelectedItem().toString();
@@ -601,6 +602,35 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jComboBox2.setBounds(479, 78, 292, 28);
     	}
     	return jComboBox2;
+    }
+    
+    private JTable getJTable1() {
+    	if(jTable1 == null) {
+    		TableModel jTable1Model = 
+    				new DefaultTableModel(
+    						new String[][] {},
+    						new String[] { "ClassName", "DateTime" });
+    		jTable1 = new JTable();
+    		jTable1.setModel(jTable1Model);
+    		jTable1.setBounds(465, 36, 306, 260);
+    	}
+    	return jTable1;
+    }
+    
+    private JScrollPane getJScrollPane_IL() {
+    	if(jScrollPane_IL == null) {
+    		jScrollPane_IL = new JScrollPane(getJTable1());
+    		jScrollPane_IL.setBounds(462, 34, 309, 262);
+    	}
+    	return jScrollPane_IL;
+    }
+    
+    private JScrollPane getJScrollPane_IL1() {
+    	if(jScrollPane_IL1 == null) {
+    		jScrollPane_IL1 = new JScrollPane(getJTextArea1());
+    		jScrollPane_IL1.setBounds(12, 34, 438, 262);
+    	}
+    	return jScrollPane_IL1;
     }
 
 }
