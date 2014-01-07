@@ -515,7 +515,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     				
     				jLabelState.setText("State: Running...");
     				
-    				((DefaultTableModel)jTable1.getModel()).getDataVector().removeAllElements();
+    				((DefaultTableModel)getJTable1().getModel()).getDataVector().removeAllElements();
     				
     				
     				String curHomeValue = jTextFieldHome.getText();

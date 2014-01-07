@@ -31,9 +31,74 @@ public class DependencyManager {
 	}
 	
 	
+	public boolean isCircleDependency(HashMap<String, HashSet<String>> xmlInfoMap){
+		
+		HashMap<String, HashSet<String>> reverseMap = new HashMap<String, HashSet<String>>();
+		for(String key: xmlInfoMap.keySet()){
+			reverseMap.put(key, new HashSet<String>());
+		}
+			
+		for (String key: xmlInfoMap.keySet()){
+			for (String str: xmlInfoMap.get(key)){
+				HashSet<String> hs = reverseMap.get(str);
+				hs.add(key);
+				reverseMap.put(str, hs);
+			}
+		}
+		
+		while (isInDegreeZero(reverseMap)){
+			
+		}
+		if (reverseMap.isEmpty()){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}	
+	
+	public boolean isInDegreeZero(HashMap<String, HashSet<String>> reverseMap){
+		HashSet<String> rmSet = new HashSet<String>();
+		for (String key: reverseMap.keySet()){
+			if (reverseMap.get(key).size() == 0){
+				rmSet.add(key);
+			}
+		}		
+		if (rmSet.size() == 0){
+			return false;
+		}
+		else{
+			for (String key: reverseMap.keySet()){
+				reverseMap.get(key).removeAll(rmSet);
+			}
+			for (String rm: rmSet){
+				reverseMap.remove(rm);
+			}
+			return true;
+		}
+	}
+	
+	// test methode
+		public static void main(String[] arg){
+			HashMap<String, HashSet<String>> map = new HashMap<String, HashSet<String>>();
+			HashSet<String> hs = new HashSet<String>(); hs.add("B");hs.add("C");
+			map.put("A", hs);
+			HashSet<String> hss = new HashSet<String>(); hss.add("C");hss.add("A");
+			map.put("B", hss);
+			map.put("C", new HashSet<String>());
+			
+			DependencyManager d = new DependencyManager();
+			System.out.println(d.isCircleDependency(map));
+		}
+		
+	
 	// create the dependencyGraph when init the system
 	public void createDependencyGraph(){
 		HashMap<String,HashSet<String>> xmlInfoMap = MiddleWareConfig.getInstance().getVfsManager().getXMLDependencyInfoMap();
+		if (isCircleDependency(xmlInfoMap)){
+			System.out.println("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
+		}
+		
 		addDeploymentNodeByAddDepMap(xmlInfoMap);
 	}
 	

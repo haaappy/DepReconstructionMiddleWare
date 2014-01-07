@@ -66,6 +66,11 @@ abstract public class VFSManager {
 					reconstructDependency(updateSet);					
 					// load the new version class
 					//LoadClassManager.getInstance().loadClassByDeploymentNameSet(updateSet);
+					
+					if (MiddleWareConfig.getInstance().getDepManager().isCircleDependency(xmlDependencyInfoMap)){
+						System.out.println("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
+					}
+					
 					// execute
 					for (String nodeName: updateSet){
 						for (String mainNodeName: XMLReader.readInfoByXMLFile(rootDir + nodeName + "/" + nodeName + ".xml", XMLFinalField.INVOKE_MAIN_NODE)){
