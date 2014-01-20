@@ -25,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 import javax.swing.JPanel;
@@ -68,13 +69,12 @@ import org.jdesktop.application.SingleFrameApplication;
  */
 public class DepRestructionMiddleWareApplication extends SingleFrameApplication {
     private JPanel topPanel;
-    private JMenuBar jMenuBar1;
-    private JMenuItem jMenuItemEdit;
+    private JMenuBar jMenuBar1; 
     private JLabel jLabel5;
     private JLabel jLabel4;
     private JLabel jLabelState;
     private JButton jButtonRemove;
-    private JButton jButtonAdd;
+    private JButton jButtonDeploy;
     private JButton jButtonChooseFile;
     private JLabel jLabel2;
     private JTextField jTextFieldFilePath;
@@ -90,20 +90,21 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     private JComboBox jComboBox1;
     private JLabel jLabel7;
     private JLabel jLabel6;
-    private JMenuItem jMenuItem4;
-    private JMenuItem jMenuItem3;
+    private JMenuItem jMenuItemDefault;
+    private JMenuItem jMenuItemEdit;
+    private JMenuItem jMenuItemHelp;
+    private JMenuItem jMenuItemUserGuide;
+    private JMenuItem jMenuItemStart;
     private JMenuItem jMenuItemStop;
     private JScrollPane jScrollPane_IL;
     private JScrollPane jScrollPane_IL1;
     private JTable jTable1;
     private JComboBox jComboBox2;
-    private JLabel jLabel3;
-    private JMenuItem jMenuItemStart;
+    private JLabel jLabel3;  
     private JMenu jMenu3;
-    private JSplitPane jSplitPane1;
     private JPanel jPanel1;
     private JMenu jMenu2;
-    private JMenuItem jMenuItemDefault;
+    
     private JMenu jMenu1;
 
     @Override
@@ -116,29 +117,10 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		getMainFrame().setJMenuBar(jMenuBar1);
     		jMenuBar1.setName("jMenuBar1");
     		{
-    			jMenu1 = new JMenu();
-    			jMenuBar1.add(jMenu1);
-    			jMenu1.setName("jMenu1");
-    			jMenu1.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
-    			{
-    				jMenuItemDefault = new JMenuItem();
-    				jMenu1.add(jMenuItemDefault);
-    				jMenuItemDefault.setName("jMenuItemDefault");
-    				jMenuItemDefault.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
-    			}
-    			{
-    				jMenuItemEdit = new JMenuItem();
-    				jMenu1.add(jMenuItemEdit);
-    				jMenuItemEdit.setName("jMenuItemEdit");
-    			}
-    		}
-    		{
-    			jMenu2 = new JMenu();
-    			jMenuBar1.add(jMenu2);
+    			jMenuBar1.add(getJMenu1());
+    			jMenuBar1.add(getJMenu2());
     			jMenuBar1.add(getJMenu3());
-    			jMenu2.setName("jMenu2");
-    			jMenu2.add(getJMenuItem3());
-    			jMenu2.add(getJMenuItem4());
+    			
     		}
     	}
         topPanel = new JPanel();
@@ -152,7 +134,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
         	getButtonGroup1();
         	jPanel1.add(getJRadioButton1());
         	jPanel1.add(getJRadioButton2());
-        	jPanel1.add(getJButtonAdd());
+        	jPanel1.add(getJButtonDeploy());
         	jPanel1.add(getJButtonRemove());
         	jPanel1.add(getJLabel1());
         	jPanel1.add(getJLabel3());
@@ -234,13 +216,6 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
         launch(DepRestructionMiddleWareApplication.class, args);
     }
     
-    private JSplitPane getJSplitPane1() {
-    	if(jSplitPane1 == null) {
-    		jSplitPane1 = new JSplitPane();
-    	}
-    	return jSplitPane1;
-    }
-    
     private JTextField getJTextFieldHome() {
     	if(jTextFieldHome == null) {
     		jTextFieldHome = new JTextField();
@@ -314,7 +289,6 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jButtonChooseFile.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
     				System.out.println("jButtonChooseFile.actionPerformed, event="+evt);
-    				//TODO add your code for jButtonChooseFile.actionPerformed
     				JFileChooser chooser = new JFileChooser();
     				if (jTextFieldFilePath.getText().length() != 0){
     					chooser.setCurrentDirectory(new File(jTextFieldFilePath.getText()));
@@ -344,13 +318,18 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	return jButtonChooseFile;
     }
     
-    private JButton getJButtonAdd() {
-    	if(jButtonAdd == null) {
-    		jButtonAdd = new JButton();
-    		jButtonAdd.setName("jButtonAdd");
-    		jButtonAdd.setBounds(16, 217, 85, 30);
+    private JButton getJButtonDeploy() {
+    	if(jButtonDeploy == null) {
+    		jButtonDeploy = new JButton();
+    		jButtonDeploy.setName("jButtonDeploy");
+    		jButtonDeploy.setBounds(16, 217, 85, 30);
+    		jButtonDeploy.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent evt) {
+    				// TODO
+    			}
+    		});
     	}
-    	return jButtonAdd;
+    	return jButtonDeploy;
     }
     
     private JButton getJButtonRemove() {
@@ -358,6 +337,11 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jButtonRemove = new JButton();
     		jButtonRemove.setName("jButtonRemove");
     		jButtonRemove.setBounds(120, 217, 85, 30);
+    		jButtonRemove.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent evt) {
+    				// TODO
+    			}
+    		});
     	}
     	return jButtonRemove;
     }
@@ -390,46 +374,115 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	return jLabel5;
     }
 
+    
+    private JMenu getJMenu1(){
+    	if(jMenu1 == null) {
+    		jMenu1 = new JMenu();
+    		jMenu1.setName("jMenu1");
+    		jMenu1.add(getJMenuItem1_1());
+    		jMenu1.add(getJMenuItem1_2());
+    	}
+    	return jMenu1;
+    }
+    
+    
+    private JMenu getJMenu2(){
+    	if(jMenu2 == null) {
+    		jMenu2 = new JMenu();
+    		jMenu2.setName("jMenu2");
+    		jMenu2.add(getJMenuItem2_1());
+    		jMenu2.add(getJMenuItem2_2());
+    	}
+    	return jMenu2;
+    }
+    
     private JMenu getJMenu3() {
     	if(jMenu3 == null) {
     		jMenu3 = new JMenu();
     		jMenu3.setName("jMenu3");
-    		jMenu3.add(getJMenuItem1());
-    		jMenu3.add(getJMenuItem2());
+    		jMenu3.add(getJMenuItem3_1());
+    		jMenu3.add(getJMenuItem3_2());
     	}
     	return jMenu3;
     }
     
-    private JMenuItem getJMenuItem1() {
+    private JMenuItem getJMenuItem1_1() {
+    	if(jMenuItemDefault == null) {
+    		jMenuItemDefault = new JMenuItem();
+    		jMenuItemDefault.setName("jMenuItemDefault");
+    		jMenuItemDefault.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent evt) {
+    				// TODO jButtonStart.doClick();
+    			}
+    		});
+    	}
+    	return jMenuItemDefault;
+    }
+    
+    private JMenuItem getJMenuItem1_2() {
+    	if(jMenuItemEdit == null) {
+    		jMenuItemEdit = new JMenuItem();
+    		jMenuItemEdit.setName("jMenuItemEdit");
+    		jMenuItemEdit.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent evt) {
+    				// TODO jButtonStart.doClick();
+    			}
+    		});
+    	}
+    	return jMenuItemEdit;
+    }
+    
+    private JMenuItem getJMenuItem2_1() {
+    	if(jMenuItemUserGuide == null) {
+    		jMenuItemUserGuide = new JMenuItem();
+    		jMenuItemUserGuide.setName("jMenuItemUserGuide");
+    		jMenuItemUserGuide.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent evt) {
+    				JOptionPane.showMessageDialog(null, "User Guide:\nThis is a system for restruct dependency in hot deployment.");
+    			}
+    		});
+    	}
+    	return jMenuItemUserGuide;
+    }
+    
+    private JMenuItem getJMenuItem2_2() {
+    	if(jMenuItemHelp == null) {
+    		jMenuItemHelp = new JMenuItem();
+    		jMenuItemHelp.setName("jMenuItemHelp");
+    		jMenuItemHelp.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent evt) {
+    				JOptionPane.showMessageDialog(null, "Help:\nYou can edit configuration and run the system.\nThen you can deploy and remove files when system is running.");
+    			}
+    		});
+    	}
+    	return jMenuItemHelp;
+    }
+    
+    
+    private JMenuItem getJMenuItem3_1() {
     	if(jMenuItemStart == null) {
     		jMenuItemStart = new JMenuItem();
     		jMenuItemStart.setName("jMenuItemStart");
+    		jMenuItemStart.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent evt) {
+    				jButtonStart.doClick();
+    			}
+    		});
     	}
     	return jMenuItemStart;
     }
     
-    private JMenuItem getJMenuItem2() {
+    private JMenuItem getJMenuItem3_2() {
     	if(jMenuItemStop == null) {
     		jMenuItemStop = new JMenuItem();
     		jMenuItemStop.setName("jMenuItemStop");
+    		jMenuItemStop.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent evt) {
+    				jButtonStop.doClick();
+    			}
+    		});
     	}
     	return jMenuItemStop;
-    }
-    
-    private JMenuItem getJMenuItem3() {
-    	if(jMenuItem3 == null) {
-    		jMenuItem3 = new JMenuItem();
-    		jMenuItem3.setName("jMenuItem3");
-    	}
-    	return jMenuItem3;
-    }
-    
-    private JMenuItem getJMenuItem4() {
-    	if(jMenuItem4 == null) {
-    		jMenuItem4 = new JMenuItem();
-    		jMenuItem4.setName("jMenuItem4");
-    	}
-    	return jMenuItem4;
     }
 
     private JLabel getJLabel6() {
@@ -470,7 +523,6 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jButtonChooseHome.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
     				System.out.println("jButtonChooseHome.actionPerformed, event="+evt);
-    				//TODO add your code for jButtonChooseHome.actionPerformed
     				JFileChooser chooser = new JFileChooser();
     				if (jTextFieldHome.getText().length() != 0){
     					chooser.setCurrentDirectory(new File(jTextFieldHome.getText()));
@@ -506,8 +558,6 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jButtonStart.setSize(40, 40);
     		jButtonStart.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
-    				System.out.println("jButtonStart.actionPerformed, event="+evt);
-    				//TODO add your code for jButtonStart.actionPerformed
     				jButtonStart.setEnabled(false);
     				jButtonStop.setEnabled(true);
     				jMenuItemStart.setEnabled(false);
@@ -530,28 +580,19 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
 						MiddleWareMain.main(new String[]{curHomeValue});
   
 					} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (SecurityException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (InvocationTargetException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (InstantiationException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (NoSuchMethodException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-    				
-    				
-    				
+									
     			}
     		});
     	}
@@ -567,8 +608,6 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jButtonStop.setSize(40, 40);
     		jButtonStop.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
-    				System.out.println("jButtonStop.actionPerformed, event="+evt);
-    				//TODO add your code for jButtonStop.actionPerformed
     				jButtonStart.setEnabled(true);
     				jButtonStop.setEnabled(false);
     				jMenuItemStart.setEnabled(true);
