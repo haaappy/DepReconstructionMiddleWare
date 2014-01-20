@@ -245,7 +245,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jTextFieldHome == null) {
     		jTextFieldHome = new JTextField();
     		jTextFieldHome.setName("jTextFieldHome");
-    		jTextFieldHome.setBounds(16, 117, 622, 28);
+    		jTextFieldHome.setBounds(16, 117, 606, 28);
     		jTextFieldHome.setEditable(false);
     	}
     	return jTextFieldHome;
@@ -292,7 +292,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jTextFieldFilePath == null) {
     		jTextFieldFilePath = new JTextField();
     		jTextFieldFilePath.setName("jTextFieldFilePath");
-    		jTextFieldFilePath.setBounds(16, 182, 621, 28);
+    		jTextFieldFilePath.setBounds(16, 182, 606, 28);
     	}
     	return jTextFieldFilePath;
     }
@@ -310,7 +310,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jButtonChooseFile == null) {
     		jButtonChooseFile = new JButton();
     		jButtonChooseFile.setName("jButtonChooseFile");
-    		jButtonChooseFile.setBounds(655, 181, 110, 30);
+    		jButtonChooseFile.setBounds(639, 181, 126, 30);
     		jButtonChooseFile.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
     				System.out.println("jButtonChooseFile.actionPerformed, event="+evt);
@@ -454,7 +454,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jComboBox1 == null) {
     		ComboBoxModel jComboBox1Model = 
     				new DefaultComboBoxModel(
-    						new String[] { "ReconstructionClassLoader", "ExtReconstructionClassLoader" });
+    						new String[] { "ReconstructionClassLoader", "ExtReconstructionClassLoader", "CircleExtReconstructionClassLoader" });
     		jComboBox1 = new JComboBox();
     		jComboBox1.setModel(jComboBox1Model);
     		jComboBox1.setBounds(479, 41, 292, 28);
@@ -465,7 +465,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     private JButton getjButtonChooseHome() {
     	if(jButtonChooseHome == null) {
     		jButtonChooseHome = new JButton();
-    		jButtonChooseHome.setBounds(655, 114, 107, 30);
+    		jButtonChooseHome.setBounds(639, 114, 123, 30);
     		jButtonChooseHome.setName("jButtonChooseHome");
     		jButtonChooseHome.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
