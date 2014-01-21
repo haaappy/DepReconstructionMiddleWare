@@ -46,6 +46,8 @@ import javax.swing.table.TableModel;
 
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.main.MiddleWareMain;
+import nju.moon.lhc.reconstruction.util.FileOperator;
+import nju.moon.lhc.reconstruction.util.XMLFinalField;
 import nju.moon.lhc.reconstruction.util.XMLReader;
 import nju.moon.lhc.reconstruction.util.XMLWriter;
 
@@ -163,7 +165,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     
     private void initDefaultValue() {
 		// add the default values
-    	String lastHome = XMLReader.readInfoByConfigXMLFile("lasthome.xml", "LastHome");
+    	String lastHome = XMLReader.readInfoByConfigXMLFile("lasthome.xml", XMLFinalField.LAST_HOME);
     	if (lastHome == null || lastHome.length() == 0 ){
     		lastHome = MiddleWareConfig.DEFAULT_HOME;
     	}
@@ -296,11 +298,11 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     				
     				FileNameExtensionFilter filter;
     				if (jLabelState.getText().lastIndexOf("running") < 0){
-    					filter = new FileNameExtensionFilter("class文件、Jar文件", "class", "jar");				
+    					filter = new FileNameExtensionFilter("class文件、Jar文件、xml文件", "class", "jar", "xml");				
     				}
     				else{
     					if (MiddleWareConfig.getInstance().getCurDeploymentWay() == MiddleWareConfig.DEPLOY_WAY_NORMAL){
-    						filter = new FileNameExtensionFilter("class文件", "class");		
+    						filter = new FileNameExtensionFilter("class文件, xml文件", "class", "xml");		
     					}
     					else{
     						filter = new FileNameExtensionFilter("Jar文件", "jar");
@@ -326,6 +328,10 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jButtonDeploy.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
     				// TODO
+    				String filePath = jTextFieldFilePath.getText();
+    				String destPath = jTextFieldHome.getText();
+    				FileOperator.copyFile(new File(filePath), new File(destPath), new File(filePath).getName());
+    				
     			}
     		});
     	}
@@ -340,6 +346,11 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jButtonRemove.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
     				// TODO
+    				String filePath = jTextFieldFilePath.getText();
+    				boolean flag = FileOperator.removeFile(filePath);
+    				if (flag){
+    					jTextFieldFilePath.setText(jTextFieldHome.getText());
+    				}
     			}
     		});
     	}
@@ -413,6 +424,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jMenuItemDefault.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
     				// TODO jButtonStart.doClick();
+    				initDefaultValue();				
     			}
     		});
     	}
@@ -426,6 +438,11 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jMenuItemEdit.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent evt) {
     				// TODO jButtonStart.doClick();
+    				String defaultHomeValue = jTextFieldHome.getText();
+    				String defaultWayValue = jRadioButton1.isSelected() ? "Normal" : "Jar";
+    				String defaultClassLoaderValue = jComboBox1.getSelectedItem().toString();
+    				String defaultPollingTimeValue = jComboBox2.getSelectedItem().toString();
+    				XMLWriter.xmlUpdateDefaultValue(defaultHomeValue + "config.xml", defaultHomeValue, defaultWayValue, defaultClassLoaderValue, defaultPollingTimeValue);
     			}
     		});
     	}
