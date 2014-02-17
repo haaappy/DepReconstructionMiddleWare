@@ -81,7 +81,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     private JLabel jLabel2;
     private JTextField jTextFieldFilePath;
     private JRadioButton jRadioButton2;
-    private JTextArea jTextArea1;
+    private JTextArea jTextAreaConsole;
     private JRadioButton jRadioButton1;
     private JLabel jLabel1;
     private JTextField jTextFieldHome;
@@ -191,7 +191,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     		jComboBox2.setSelectedItem("5000ms");
     	}
     	
-    	
+    	jTextAreaConsole.setText("");
 		
 	}
     
@@ -205,9 +205,12 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	}
     	tm.addRow(new Object[]{className, date.toLocaleString()});	
     }
-
-
-
+    
+    public void addTextAreaConsole(String consoleMessage){
+    	String message = getJTextAreaConsole().getText();
+    	getJTextAreaConsole().setText(message + consoleMessage + "\n");
+    }
+    	
 	@Override
     public void shutdown(){
     	System.out.println("shut down!!!");
@@ -247,13 +250,13 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	return jRadioButton1;
     }
     
-    private JTextArea getJTextArea1() {
-    	if(jTextArea1 == null) {
-    		jTextArea1 = new JTextArea();
-    		jTextArea1.setName("jTextArea1");
-    		jTextArea1.setBounds(10, 34, 440, 262);
+    private JTextArea getJTextAreaConsole() {
+    	if(jTextAreaConsole == null) {
+    		jTextAreaConsole = new JTextArea();
+    		jTextAreaConsole.setName("jTextAreaConsole");
+    		jTextAreaConsole.setBounds(10, 34, 440, 262);
     	}
-    	return jTextArea1;
+    	return jTextAreaConsole;
     }
 
     private JRadioButton getJRadioButton2() {
@@ -582,8 +585,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     				
     				jLabelState.setText("State: Running...");
     				
-    				((DefaultTableModel)getJTable1().getModel()).getDataVector().removeAllElements();
-    				
+    				((DefaultTableModel)getJTable1().getModel()).getDataVector().removeAllElements(); 				
     				
     				String curHomeValue = jTextFieldHome.getText();
     				String curWayValue = jRadioButton1.isSelected() ? "Normal" : "Jar";
@@ -595,6 +597,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     				
 					try {
 						MiddleWareMain.main(new String[]{curHomeValue});
+						jTextAreaConsole.setText("The Middle Server is Running...\n");
   
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
@@ -632,7 +635,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     				jLabelState.setText("State: Stop!");
     				
     				MiddleWareMain.stop();
-    				
+    				addTextAreaConsole("The Middle Server is stopped!");
     			}
     		});
     	}
@@ -683,7 +686,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     
     private JScrollPane getJScrollPane_IL1() {
     	if(jScrollPane_IL1 == null) {
-    		jScrollPane_IL1 = new JScrollPane(getJTextArea1());
+    		jScrollPane_IL1 = new JScrollPane(getJTextAreaConsole());
     		jScrollPane_IL1.setBounds(12, 34, 438, 262);
     	}
     	return jScrollPane_IL1;

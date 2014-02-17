@@ -51,6 +51,7 @@ abstract public class VFSManager {
 					Thread.sleep(MiddleWareConfig.getInstance().getCurPollingTime());
 					
 					System.out.println("The time is: " + new Date().toString() + " and scan is start!");
+					MiddleWareMain.application.addTextAreaConsole("The time is: " + new Date().toString() + " and scan is start!");
 					
 					// get the remove file names
 					HashSet<String> rmvSet = getRemoveFileName();
@@ -69,6 +70,7 @@ abstract public class VFSManager {
 					
 					if (MiddleWareConfig.getInstance().getDepManager().isCircleDependency(xmlDependencyInfoMap)){
 						System.out.println("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
+						MiddleWareMain.application.addTextAreaConsole("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
 					}
 					
 					// execute
@@ -79,6 +81,7 @@ abstract public class VFSManager {
 					}
 					
 					System.out.println("The time is: " + new Date().toString() + " and scan is over!");
+					MiddleWareMain.application.addTextAreaConsole("The time is: " + new Date().toString() + " and scan is over!");
 				}
 			}
 			catch(Exception e){
