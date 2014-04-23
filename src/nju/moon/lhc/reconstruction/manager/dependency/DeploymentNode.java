@@ -91,4 +91,25 @@ public class DeploymentNode {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if (obj == null){
+			return false;
+		}
+		if (this == obj){
+			return true;
+		}
+		if (obj instanceof DeploymentNode){
+			return this.nodeName.equals(((DeploymentNode) obj).nodeName);
+		}
+		else{
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode(){
+		return nodeName.hashCode();
+	}
 }
