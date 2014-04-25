@@ -14,13 +14,10 @@ import java.util.zip.ZipFile;
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.main.MiddleWareMain;
 
-public class ReconstructionClassLoader extends ClassLoader {
+public class ReconstructionClassLoader extends AbstractClassLoader {
 
-	protected String classLoaderName;
 	protected ArrayList<ClassLoader> parents;
-	protected String rootName;
-	protected String rootDir = "/home/happy/JBOSS/OSGI-TEST-DEPLOYMENT/";
-	public static final String DEFAULT_NAME = "A-JAR";
+
 	
 	public ReconstructionClassLoader(String rootDir, ArrayList<ClassLoader> parents, String classLoaderName){
 		this.rootDir = rootDir;
