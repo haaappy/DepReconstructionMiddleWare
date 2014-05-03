@@ -3,7 +3,7 @@ package nju.moon.lhc.reconstruction.manager.dependency;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class AdaptDependencyManager {
+public class AdaptDependencyManager extends AbstractDependencyManager{
 
 	private HashSet<DeploymentNode> loadedNodeRepository;
 	

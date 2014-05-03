@@ -7,6 +7,8 @@ import java.util.HashSet;
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.util.XMLFinalField;
 import nju.moon.lhc.reconstruction.util.XMLReader;
+import nju.moon.lhc.reconstruction.manager.dependency.DependencyManager;
+
 
 public class JarVFSManager extends VFSManager {
 
@@ -62,7 +64,7 @@ public class JarVFSManager extends VFSManager {
 		xmlDependencyInfoMap.putAll(addDepMap);
 		xmlMainClassInfoMap.putAll(addMainMap);
 		// add the new nodeMap and the dependency
-		MiddleWareConfig.getInstance().getDepManager().addDeploymentNodeByAddDepMap(addDepMap);			
+		((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).addDeploymentNodeByAddDepMap(addDepMap);			
 	}
 
 

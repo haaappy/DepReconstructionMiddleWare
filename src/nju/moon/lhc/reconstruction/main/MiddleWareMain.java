@@ -35,7 +35,7 @@ public class MiddleWareMain {
 			MiddleWareConfig.getNewInstance(MiddleWareConfig.DEFAULT_HOME);
 		}		
 		
-		MiddleWareConfig.getInstance().getDepManager().createDependencyGraph();
+		((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).createDependencyGraph();
 		//DependencyManager.getInstance().createDependencyGraph();
 		
 		executeAllMainMethode();

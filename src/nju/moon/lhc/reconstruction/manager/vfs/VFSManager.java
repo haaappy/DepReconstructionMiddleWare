@@ -19,13 +19,13 @@ import org.w3c.dom.NodeList;
 
 
 
-abstract public class VFSManager {
+abstract public class VFSManager extends AbstractVFSManager{
 
 	protected String rootDir = "/home/happy/JBOSS/OSGI-TEST-DEPLOYMENT/";
 	
-	protected HashSet<File> deploymentSet;
+//	protected HashSet<File> deploymentSet;
 	protected HashMap<String, HashSet<String>> xmlDependencyInfoMap;
-	protected HashMap<String, HashSet<String>> xmlMainClassInfoMap;
+//	protected HashMap<String, HashSet<String>> xmlMainClassInfoMap;
 	
 	
 //	private static class SingletonHolder{
@@ -37,9 +37,7 @@ abstract public class VFSManager {
 //	}
 	
 	public VFSManager(String rootDir){
-		this.rootDir = rootDir;
-		initDeploymentSet();
-		readAllXMLInfo();
+		super(rootDir);
 		new PollingThread().start();
 	}
 	
@@ -68,7 +66,7 @@ abstract public class VFSManager {
 					// load the new version class
 					//LoadClassManager.getInstance().loadClassByDeploymentNameSet(updateSet);
 					
-					if (MiddleWareConfig.getInstance().getDepManager().isCircleDependency(xmlDependencyInfoMap)){
+					if (((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).isCircleDependency(xmlDependencyInfoMap)){
 						System.out.println("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
 						MiddleWareMain.application.addTextAreaConsole("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
 					}
@@ -135,7 +133,7 @@ abstract public class VFSManager {
 		for (String nodeName: xmlDependencyInfoMap.keySet()){
 			for (String depName: xmlDependencyInfoMap.get(nodeName)){
 				if (depName.equals(dependencyName)){
-					MiddleWareConfig.getInstance().getDepManager().reconstructDependencyByTwoNode(nodeName, depName);
+					((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).reconstructDependencyByTwoNode(nodeName, depName);
 					reconstructDependencyByName(nodeName);   // recursion for reconstructing dependency
 				}
 			}
@@ -161,7 +159,7 @@ abstract public class VFSManager {
 			xmlMainClassInfoMap.remove(rmvDepName);
 		}
 		// rmvDepList  ==>   key: A    value  [B, C]     remove the child named A in  B and C   finally remove A
-		MiddleWareConfig.getInstance().getDepManager().modifyDeploymentNodeByRmvDepMap(rmvDepMap);		
+		((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).modifyDeploymentNodeByRmvDepMap(rmvDepMap);		
 	}
 		
 	// get the file that disappear in the OSGI-TEST-DEPLOYMENT

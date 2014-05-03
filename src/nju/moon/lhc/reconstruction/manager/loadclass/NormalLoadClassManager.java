@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
+import nju.moon.lhc.reconstruction.manager.dependency.DependencyManager;
 import nju.moon.lhc.reconstruction.manager.dependency.DeploymentNode;
 
 public class NormalLoadClassManager extends LoadClassManager {
@@ -23,7 +24,7 @@ public class NormalLoadClassManager extends LoadClassManager {
 	
 	@Override
 	public Class<?> loadClassByDeployment(String deploymentName, String className){
-		HashMap<String, DeploymentNode> nodeMap = MiddleWareConfig.getInstance().getDepManager().getNodeMap();
+		HashMap<String, DeploymentNode> nodeMap = ((DependencyManager)(MiddleWareConfig.getInstance().getDepManager())).getNodeMap();
 		DeploymentNode curNode = nodeMap.get(deploymentName);
 		ClassLoader cl = curNode.getClassLoader();
 		try {

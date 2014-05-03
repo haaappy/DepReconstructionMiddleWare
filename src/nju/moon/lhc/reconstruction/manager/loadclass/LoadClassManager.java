@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 
 
-abstract public class LoadClassManager {
+abstract public class LoadClassManager implements InterfaceLoadClassManager{
 //	private static class SingletonHolder{
 //		private static final LoadClassManager INSTANCE = new LoadClassManager();
 //	}
@@ -17,9 +17,9 @@ abstract public class LoadClassManager {
 		
 	}
 	
-	abstract public void loadAllClass();
+	//abstract public void loadAllClass();
 	
-	abstract public Class<?> loadClassByDeployment(String deploymentName, String className);
+	//abstract public Class<?> loadClassByDeployment(String deploymentName, String className);
 	
-	abstract public void loadClassByDeploymentNameSet(HashSet<String> nameSet);
+	//abstract public void loadClassByDeploymentNameSet(HashSet<String> nameSet);
 }

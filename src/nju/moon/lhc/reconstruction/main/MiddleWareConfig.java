@@ -1,12 +1,16 @@
 package nju.moon.lhc.reconstruction.main;
 
+import nju.moon.lhc.reconstruction.classloader.AbstractClassLoader;
 import nju.moon.lhc.reconstruction.classloader.CircleExtReconstructionClassLoader;
 import nju.moon.lhc.reconstruction.classloader.ExtReconstructionClassLoader;
 import nju.moon.lhc.reconstruction.classloader.ReconstructionClassLoader;
+import nju.moon.lhc.reconstruction.manager.dependency.AbstractDependencyManager;
 import nju.moon.lhc.reconstruction.manager.dependency.DependencyManager;
+import nju.moon.lhc.reconstruction.manager.loadclass.InterfaceLoadClassManager;
 import nju.moon.lhc.reconstruction.manager.loadclass.JarLoadClassManager;
 import nju.moon.lhc.reconstruction.manager.loadclass.LoadClassManager;
 import nju.moon.lhc.reconstruction.manager.loadclass.NormalLoadClassManager;
+import nju.moon.lhc.reconstruction.manager.vfs.AbstractVFSManager;
 import nju.moon.lhc.reconstruction.manager.vfs.JarVFSManager;
 import nju.moon.lhc.reconstruction.manager.vfs.NormalVFSManager;
 import nju.moon.lhc.reconstruction.manager.vfs.VFSManager;
@@ -34,9 +38,9 @@ public class MiddleWareConfig {
 	public static final int CIRCLE_EXT_RECONSTRUCTION_CLASSLOADER = 5;
 	
 	
-	private DependencyManager depManager;
-	private LoadClassManager lcManager;
-	private VFSManager vfsManager;
+	private AbstractDependencyManager depManager;
+	private InterfaceLoadClassManager lcManager;
+	private AbstractVFSManager vfsManager;
 			
 	private volatile static MiddleWareConfig singleton;
 
@@ -120,7 +124,7 @@ public class MiddleWareConfig {
 		
 	}
 	
-	public ReconstructionClassLoader createClassLoaderByName(String nodeName){
+	public AbstractClassLoader createClassLoaderByName(String nodeName){
 		if (curClassLoader == MiddleWareConfig.RECONSTRUCTION_CLASSLOADER){
 			return new ReconstructionClassLoader(curMiddleWareHome, nodeName);
 		}
@@ -285,27 +289,27 @@ public class MiddleWareConfig {
 		}
 	}
 
-	public DependencyManager getDepManager() {
+	public AbstractDependencyManager getDepManager() {
 		return depManager;
 	}
 
-	public void setDepManager(DependencyManager depManager) {
+	public void setDepManager(AbstractDependencyManager depManager) {
 		this.depManager = depManager;
 	}
 
-	public LoadClassManager getLcManager() {
+	public InterfaceLoadClassManager getLcManager() {
 		return lcManager;
 	}
 
-	public void setLcManager(LoadClassManager lcManager) {
+	public void setLcManager(InterfaceLoadClassManager lcManager) {
 		this.lcManager = lcManager;
 	}
 
-	public VFSManager getVfsManager() {
+	public AbstractVFSManager getVfsManager() {
 		return vfsManager;
 	}
 
-	public void setVfsManager(VFSManager vfsManager) {
+	public void setVfsManager(AbstractVFSManager vfsManager) {
 		this.vfsManager = vfsManager;
 	}
 

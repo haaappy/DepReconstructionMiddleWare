@@ -8,7 +8,7 @@ import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.manager.vfs.VFSManager;
 
 
-public class DependencyManager {
+public class DependencyManager extends AbstractDependencyManager{
 
 	private DeploymentNode systemRoot;  // System class loader
 	private HashMap<String, DeploymentNode> nodeMap;  // store all the node
@@ -94,7 +94,7 @@ public class DependencyManager {
 	
 	// create the dependencyGraph when init the system
 	public void createDependencyGraph(){
-		HashMap<String,HashSet<String>> xmlInfoMap = MiddleWareConfig.getInstance().getVfsManager().getXMLDependencyInfoMap();
+		HashMap<String,HashSet<String>> xmlInfoMap = ((VFSManager)(MiddleWareConfig.getInstance().getVfsManager())).getXMLDependencyInfoMap();
 		if (isCircleDependency(xmlInfoMap)){
 			System.out.println("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
 		}

@@ -8,6 +8,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
+import nju.moon.lhc.reconstruction.manager.dependency.DependencyManager;
 import nju.moon.lhc.reconstruction.manager.dependency.DeploymentNode;
 
 public class JarLoadClassManager extends LoadClassManager {
@@ -24,7 +25,7 @@ public class JarLoadClassManager extends LoadClassManager {
 	@Override
 	public Class<?> loadClassByDeployment(String deploymentName, String className) {
 		// TODO Auto-generated method stub
-		HashMap<String, DeploymentNode> nodeMap = MiddleWareConfig.getInstance().getDepManager().getNodeMap();
+		HashMap<String, DeploymentNode> nodeMap = ((DependencyManager)(MiddleWareConfig.getInstance().getDepManager())).getNodeMap();
 		DeploymentNode curNode = nodeMap.get(deploymentName);
 		ClassLoader cl = curNode.getClassLoader();
 		

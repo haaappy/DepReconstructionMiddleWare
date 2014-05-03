@@ -10,6 +10,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.util.XMLFinalField;
 import nju.moon.lhc.reconstruction.util.XMLReader;
+import nju.moon.lhc.reconstruction.manager.dependency.DependencyManager;
+
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -76,6 +78,6 @@ public class NormalVFSManager extends VFSManager {
 		xmlDependencyInfoMap.putAll(addDepMap);
 		xmlMainClassInfoMap.putAll(addMainMap);
 		// add the new nodeMap and the dependency
-		MiddleWareConfig.getInstance().getDepManager().addDeploymentNodeByAddDepMap(addDepMap);			
+		((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).addDeploymentNodeByAddDepMap(addDepMap);			
 	}
 }
