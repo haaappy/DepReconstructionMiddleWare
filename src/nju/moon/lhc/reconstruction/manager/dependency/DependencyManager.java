@@ -11,25 +11,11 @@ import nju.moon.lhc.reconstruction.manager.vfs.VFSManager;
 public class DependencyManager extends AbstractDependencyManager{
 
 	private DeploymentNode systemRoot;  // System class loader
-	private HashMap<String, DeploymentNode> nodeMap;  // store all the node
-	
-//	private static class SingletonHolder{
-//		private static final DependencyManager INSTANCE = new DependencyManager();
-//	}
-//	
-//	public static final DependencyManager getInstance(){
-//		return SingletonHolder.INSTANCE;
-//	}
 	
 	public DependencyManager(){
+		super();
 		systemRoot = new DeploymentNode();
-		nodeMap = new HashMap<String, DeploymentNode>();
-	}
-	
-	public HashMap<String, DeploymentNode> getNodeMap(){
-		return nodeMap;
-	}
-	
+	}		
 	
 	public boolean isCircleDependency(HashMap<String, HashSet<String>> xmlInfoMap){
 		

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.util.XMLFinalField;
 import nju.moon.lhc.reconstruction.util.XMLReader;
+import nju.moon.lhc.reconstruction.manager.dependency.AdaptDependencyManager;
 
 public class AdaptNormalVFSManager extends AdaptVFSManager {
 
@@ -74,6 +75,7 @@ public class AdaptNormalVFSManager extends AdaptVFSManager {
 		// add the new nodeMap and the dependency
 		// TODO do sth about add action between DepManager
 		//MiddleWareConfig.getInstance().getDepManager().addDeploymentNodeByAddDepMap(addDepMap);			
+		super.addAction(addSet);
 	}
 
 

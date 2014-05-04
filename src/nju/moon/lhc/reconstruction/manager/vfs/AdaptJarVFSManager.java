@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
+import nju.moon.lhc.reconstruction.manager.dependency.AdaptDependencyManager;
 import nju.moon.lhc.reconstruction.util.XMLFinalField;
 import nju.moon.lhc.reconstruction.util.XMLReader;
 
@@ -62,6 +63,7 @@ public class AdaptJarVFSManager extends AdaptVFSManager {
 		
 		// TODO do sth about add action between DepManager
 		//MiddleWareConfig.getInstance().getDepManager().addDeploymentNodeByAddDepMap(addDepMap);			
+		super.addAction(addSet);
 	}
 
 

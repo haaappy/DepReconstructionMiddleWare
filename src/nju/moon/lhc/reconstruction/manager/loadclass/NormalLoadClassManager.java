@@ -24,7 +24,7 @@ public class NormalLoadClassManager extends LoadClassManager {
 	
 	@Override
 	public Class<?> loadClassByDeployment(String deploymentName, String className){
-		HashMap<String, DeploymentNode> nodeMap = ((DependencyManager)(MiddleWareConfig.getInstance().getDepManager())).getNodeMap();
+		HashMap<String, DeploymentNode> nodeMap = MiddleWareConfig.getInstance().getDepManager().getNodeMap();
 		DeploymentNode curNode = nodeMap.get(deploymentName);
 		ClassLoader cl = curNode.getClassLoader();
 		try {

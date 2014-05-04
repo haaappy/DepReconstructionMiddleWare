@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
@@ -14,27 +12,12 @@ import nju.moon.lhc.reconstruction.manager.dependency.DependencyManager;
 import nju.moon.lhc.reconstruction.util.XMLFinalField;
 import nju.moon.lhc.reconstruction.util.XMLReader;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
 
 
 abstract public class VFSManager extends AbstractVFSManager{
 
-	protected String rootDir = "/home/happy/JBOSS/OSGI-TEST-DEPLOYMENT/";
-	
-//	protected HashSet<File> deploymentSet;
 	protected HashMap<String, HashSet<String>> xmlDependencyInfoMap;
-//	protected HashMap<String, HashSet<String>> xmlMainClassInfoMap;
-	
-	
-//	private static class SingletonHolder{
-//		private static final VFSManager INSTANCE = new VFSManager();
-//	}
-//	
-//	public static final VFSManager getInstance(){
-//		return SingletonHolder.INSTANCE;
-//	}
+
 	
 	public VFSManager(String rootDir){
 		super(rootDir);
@@ -184,7 +167,10 @@ abstract public class VFSManager extends AbstractVFSManager{
 	}
 		
 	// the action that vfs add the file
-	abstract protected void addAction(HashSet<String> addSet);
+	@Override
+	protected void addAction(HashSet<String> addSet){
+		
+	}
 		
 	// the action that vfs update the file
 	protected void updateAction(HashSet<String> updateSet){
@@ -199,7 +185,11 @@ abstract public class VFSManager extends AbstractVFSManager{
 		
 		
 	//  get the update or add File in the OSGI-TEST-DEPLOYMENT  (modify time is changed)
-	abstract protected HashSet<String> getAllChangedFileName();
+	@Override
+	protected HashSet<String> getAllChangedFileName(){
+		return null;
+	}
+	
 		
 	// get the update File in the OSGI-TEST-DEPLOYMENT
 	protected HashSet<String> getUpdateFileName(){

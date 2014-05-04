@@ -5,15 +5,18 @@ import nju.moon.lhc.reconstruction.classloader.CircleExtReconstructionClassLoade
 import nju.moon.lhc.reconstruction.classloader.ExtReconstructionClassLoader;
 import nju.moon.lhc.reconstruction.classloader.ReconstructionClassLoader;
 import nju.moon.lhc.reconstruction.manager.dependency.AbstractDependencyManager;
+import nju.moon.lhc.reconstruction.manager.dependency.AdaptDependencyManager;
 import nju.moon.lhc.reconstruction.manager.dependency.DependencyManager;
+import nju.moon.lhc.reconstruction.manager.loadclass.AdaptJarLoadClassManager;
+import nju.moon.lhc.reconstruction.manager.loadclass.AdaptNormalLoadClassManager;
 import nju.moon.lhc.reconstruction.manager.loadclass.InterfaceLoadClassManager;
 import nju.moon.lhc.reconstruction.manager.loadclass.JarLoadClassManager;
-import nju.moon.lhc.reconstruction.manager.loadclass.LoadClassManager;
 import nju.moon.lhc.reconstruction.manager.loadclass.NormalLoadClassManager;
 import nju.moon.lhc.reconstruction.manager.vfs.AbstractVFSManager;
+import nju.moon.lhc.reconstruction.manager.vfs.AdaptJarVFSManager;
+import nju.moon.lhc.reconstruction.manager.vfs.AdaptNormalVFSManager;
 import nju.moon.lhc.reconstruction.manager.vfs.JarVFSManager;
 import nju.moon.lhc.reconstruction.manager.vfs.NormalVFSManager;
-import nju.moon.lhc.reconstruction.manager.vfs.VFSManager;
 import nju.moon.lhc.reconstruction.util.XMLReader;
 
 
@@ -36,6 +39,7 @@ public class MiddleWareConfig {
 	public static final int RECONSTRUCTION_CLASSLOADER = 3;
 	public static final int EXT_RECONSTRUCTION_CLASSLOADER = 4;
 	public static final int CIRCLE_EXT_RECONSTRUCTION_CLASSLOADER = 5;
+	public static final int ADAPT_DEP_CLASSLOADER = 6;
 	
 	
 	private AbstractDependencyManager depManager;
@@ -90,15 +94,9 @@ public class MiddleWareConfig {
 			setDefaultClassLoaderByStr(configResults[6]);
 			setDefaultPollingTime(Integer.parseInt(configResults[7].replaceAll("ms", "")));
 			
-			setManagersByCurDeploymentWay(configResults[1]);
+			setManagersByCurDeploymentWay(configResults[1], configResults[2]);
 			
 			setIsRunning(true);
-			// TODO  the managers need to change 
-			// the way deals with how to new the object
-			
-			// TODO how about isRunning??
-		
-			
 			
 		}
 		else{
@@ -106,21 +104,40 @@ public class MiddleWareConfig {
 		}
 	}
 
-	private void setManagersByCurDeploymentWay(String way) {
-		setDepManager(new DependencyManager());
-		if (way.equals("Normal")){
-			setLcManager(new NormalLoadClassManager());
-			setVfsManager(new NormalVFSManager(curMiddleWareHome));
-		}
-		else if (way.equals("Jar")){
-			setLcManager(new JarLoadClassManager());
-			setVfsManager(new JarVFSManager(curMiddleWareHome));
+	private void setManagersByCurDeploymentWay(String way, String classloaderName) {
+		if (classloaderName.equals("AdaptDepClassLoader")){
+			setDepManager(new AdaptDependencyManager());
+			if (way.equals("Normal")){
+				setLcManager(new AdaptNormalLoadClassManager());
+				setVfsManager(new AdaptNormalVFSManager(curMiddleWareHome));
+			}
+			else if (way.equals("Jar")){
+				setLcManager(new AdaptJarLoadClassManager());
+				setVfsManager(new AdaptJarVFSManager(curMiddleWareHome));
+			}
+			else{
+				System.out.println("Error in initConfig in setManagersByCurDeploymentWay. ");		
+				setLcManager(new AdaptNormalLoadClassManager());
+				setVfsManager(new AdaptNormalVFSManager(curMiddleWareHome));
+			}
 		}
 		else{
-			System.out.println("Error in initConfig in setManagersByCurDeploymentWay. ");		
-			setLcManager(new NormalLoadClassManager());
-			setVfsManager(new NormalVFSManager(curMiddleWareHome));
+			setDepManager(new DependencyManager());
+			if (way.equals("Normal")){
+				setLcManager(new NormalLoadClassManager());
+				setVfsManager(new NormalVFSManager(curMiddleWareHome));
+			}
+			else if (way.equals("Jar")){
+				setLcManager(new JarLoadClassManager());
+				setVfsManager(new JarVFSManager(curMiddleWareHome));
+			}
+			else{
+				System.out.println("Error in initConfig in setManagersByCurDeploymentWay. ");		
+				setLcManager(new NormalLoadClassManager());
+				setVfsManager(new NormalVFSManager(curMiddleWareHome));
+			}
 		}
+		
 		
 	}
 	
@@ -254,6 +271,9 @@ public class MiddleWareConfig {
 		else if (str.equals("CircleExtReconstructionClassLoader")){
 			setCurClassLoaderWay(MiddleWareConfig.CIRCLE_EXT_RECONSTRUCTION_CLASSLOADER);
 		}
+		else if (str.equals("AdaptDepClassLoader")){
+			setCurClassLoaderWay(MiddleWareConfig.ADAPT_DEP_CLASSLOADER);
+		}
 		else{
 			System.out.println("Error in initConfig in setCurClassLoaderByStr. ");
 			setCurClassLoaderWay(MiddleWareConfig.RECONSTRUCTION_CLASSLOADER);
@@ -282,6 +302,9 @@ public class MiddleWareConfig {
 		}
 		else if (str.equals("CircleExtReconstructionClassLoader")){
 			setDefaultClassLoaderWay(MiddleWareConfig.CIRCLE_EXT_RECONSTRUCTION_CLASSLOADER);
+		}
+		else if (str.equals("AdaptDependencyClassLoader")){
+			setDefaultClassLoaderWay(MiddleWareConfig.ADAPT_DEP_CLASSLOADER);
 		}
 		else{
 			System.out.println("Error in initConfig in setDefaultClassLoaderByStr. ");

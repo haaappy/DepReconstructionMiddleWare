@@ -9,6 +9,7 @@ import org.jdesktop.application.Application;
 
 import nju.moon.lhc.reconstruction.gui.DepRestructionMiddleWareApplication;
 import nju.moon.lhc.reconstruction.manager.dependency.DependencyManager;
+import nju.moon.lhc.reconstruction.manager.loadclass.AdaptLoadClassManager;
 import nju.moon.lhc.reconstruction.manager.loadclass.LoadClassManager;
 import nju.moon.lhc.reconstruction.manager.vfs.VFSManager;
 
@@ -27,7 +28,6 @@ public class MiddleWareMain {
 	public static DepRestructionMiddleWareApplication application = null;
 	
 	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException, SecurityException, NoSuchMethodException {
-		// TODO Auto-generated method stub
 		if (args != null && args.length == 1){
 			MiddleWareConfig.getNewInstance(args[0]);
 		}
@@ -35,8 +35,13 @@ public class MiddleWareMain {
 			MiddleWareConfig.getNewInstance(MiddleWareConfig.DEFAULT_HOME);
 		}		
 		
-		((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).createDependencyGraph();
-		//DependencyManager.getInstance().createDependencyGraph();
+		// TODO different start
+		if (MiddleWareConfig.getInstance().getCurClassLoaderWay() == MiddleWareConfig.ADAPT_DEP_CLASSLOADER){
+			((AdaptLoadClassManager)MiddleWareConfig.getInstance().getLcManager()).initAdaptLoadClassManager();		
+		}
+		else{
+			((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).createDependencyGraph();
+		}
 		
 		executeAllMainMethode();
 	}

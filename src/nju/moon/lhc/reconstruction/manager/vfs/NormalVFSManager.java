@@ -4,17 +4,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.util.XMLFinalField;
 import nju.moon.lhc.reconstruction.util.XMLReader;
 import nju.moon.lhc.reconstruction.manager.dependency.DependencyManager;
 
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 public class NormalVFSManager extends VFSManager {
 	

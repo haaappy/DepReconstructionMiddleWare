@@ -10,6 +10,8 @@ import nju.moon.lhc.reconstruction.main.MiddleWareMain;
 import nju.moon.lhc.reconstruction.util.XMLFinalField;
 import nju.moon.lhc.reconstruction.util.XMLReader;
 
+import nju.moon.lhc.reconstruction.manager.dependency.AdaptDependencyManager;
+
 public abstract class AdaptVFSManager extends AbstractVFSManager{
 	
 	public AdaptVFSManager(String rootDir){
@@ -29,31 +31,17 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 					
 					// get the remove file names
 					HashSet<String> rmvSet = getRemoveFileName();
-					// remove action if the file does not exsist
-					removeAction(rmvSet);
-									
 					// get the update file names
 					HashSet<String> updateSet = getUpdateFileName();
+					
+					rmvSet.addAll(updateSet);
+					
+					// remove action if the file does not exsist
+					removeAction(rmvSet);   // include the update old version
+					
+					
 					// update action if the file updates 
 					updateAction(updateSet);  // addAction in the updateAction
-					
-					
-					
-					
-			/*		
-					// reconstruct dependency!!!!  
-					reconstructDependency(updateSet);					
-					// load the new version class
-					//LoadClassManager.getInstance().loadClassByDeploymentNameSet(updateSet);
-					
-					
-					
-					if (MiddleWareConfig.getInstance().getDepManager().isCircleDependency(xmlDependencyInfoMap)){
-						System.out.println("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
-						MiddleWareMain.application.addTextAreaConsole("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
-					}
-					
-		    */	
 					
 					// execute
 					for (String nodeName: updateSet){
@@ -75,8 +63,6 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 	}
 	
 	
-	
-	
 	// the action that vfs remove the file 
 	@Override
 	protected void removeAction(HashSet<String> rmvSet){   	
@@ -89,44 +75,21 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 		}
 		deploymentSet.removeAll(delSet);
 	
-		/*
-		// TODO if remove sth in the depleymentSet
-		// get the remove dependency
-		HashMap<String, HashSet<String>> rmvDepMap = getRemoveDependency(rmvSet);
-		// remove the 'xmlDependencyInfoMap' and 'xmlMainClassInfoMap'
-		for (String rmvDepName: rmvDepMap.keySet()){
-			//xmlDependencyInfoMap.remove(rmvDepName);
-			xmlMainClassInfoMap.remove(rmvDepName);
-		}
-		// rmvDepList  ==>   key: A    value  [B, C]     remove the child named A in  B and C   finally remove A
-		MiddleWareConfig.getInstance().getDepManager().modifyDeploymentNodeByRmvDepMap(rmvDepMap);		
-	*/
-	// TODO do the remove things about adpatDepManager
-	
+		// *** important to reconstruct  ****
+		((AdaptDependencyManager)MiddleWareConfig.getInstance().getDepManager()).reconstructDependency(rmvSet);
+		
 	}
-	
-	/*
-	// get the remove dependency from xmlInfoMap
-	protected HashMap<String, HashSet<String>> getRemoveDependency(HashSet<String> rmvSet){
-		HashMap<String, HashSet<String>> rmvDepMap = new HashMap<String, HashSet<String>>();
-		for (String rmvName: rmvSet){
-			rmvDepMap.put(rmvName, xmlDependencyInfoMap.get(rmvName));
-		}
-		return rmvDepMap;
-	}
-	*/
 		
 		
 	// the action that vfs add the file
 	@Override
-	abstract protected void addAction(HashSet<String> addSet);
+	protected void addAction(HashSet<String> addSet){
+		((AdaptDependencyManager)MiddleWareConfig.getInstance().getDepManager()).addNewDeploymentNode(addSet);
+	}
 		
 	// the action that vfs update the file
 	@Override
 	protected void updateAction(HashSet<String> updateSet){
-		// first remove the old version
-		removeAction(updateSet);
-		// second add the new version
 		// add the add file names in the update set
 		updateSet.addAll(getAddFileName());				
 		// add action if the file adds and update		
@@ -136,7 +99,9 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 		
 	//  get the update or add File in the OSGI-TEST-DEPLOYMENT  (modify time is changed)
 	@Override
-	abstract protected HashSet<String> getAllChangedFileName();
+	protected HashSet<String> getAllChangedFileName(){
+		return null;
+	}
 
 	
 }

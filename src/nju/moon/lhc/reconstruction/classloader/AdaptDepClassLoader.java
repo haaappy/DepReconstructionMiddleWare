@@ -5,6 +5,7 @@ import java.util.Date;
 
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.main.MiddleWareMain;
+import nju.moon.lhc.reconstruction.manager.dependency.AdaptDependencyManager;
 
 public class AdaptDepClassLoader extends AbstractClassLoader {
 	
@@ -40,6 +41,14 @@ public class AdaptDepClassLoader extends AbstractClassLoader {
 	
 	public void setClassLoaderName(String classLoaderName) {
 		this.classLoaderName = classLoaderName;
+	}
+	
+	public ArrayList<ClassLoader> getDepClassLoaders(){
+		return depClassLoaders;
+	}
+	
+	public ArrayList<ClassLoader> getDepInverseClassLoaders(){
+		return depInverseClassLoaders;
 	}
 	
 	
@@ -89,30 +98,19 @@ public class AdaptDepClassLoader extends AbstractClassLoader {
 					c = findClass(name);
 					if (c == null){
 						for (ClassLoader depClassLoader: depClassLoaders){
-							try{
-								c = depClassLoader.loadClass(name);
-								if (c != null){
-									return c;
-								}
-							}
-							catch(ClassNotFoundException e){   // if one depClassLoader cannot found , continue
-								continue;
+							c = ((AdaptDepClassLoader) depClassLoader).loadClassByRepository(name);
+							if (c != null){
+								return c;
 							}		
 						}
-						// TODO to finish depManager
-						/*
-						ArrayList<ClassLoader> repositoryList = MiddleWareConfig.getInstance().getDepManager().getAllRepositoryClassLoaders();
+						
+						ArrayList<ClassLoader> repositoryList = ((AdaptDependencyManager)MiddleWareConfig.getInstance().getDepManager()).getAllRepositoryClassLoaders();
 						for (ClassLoader repClassLoader: repositoryList){
-							try{
-								c = repClassLoader.loadClass(name);
-								if (c != null){
-									return c;
-								}
-							}
-							catch(ClassNotFoundException e){   // if one repClassLoader cannot found , continue
-								continue;
+							c = ((AdaptDepClassLoader) repClassLoader).loadClassByRepository(name);
+							if (c != null){
+								return c;
 							}		
-						}*/
+						}
 						c = this.getParent().loadClass(name);   // no class loader can load. load class with AppClassLoader				
 					}					
 				}			
@@ -120,6 +118,14 @@ public class AdaptDepClassLoader extends AbstractClassLoader {
 			catch (ClassNotFoundException e){
 				c = ClassLoader.getSystemClassLoader().loadClass(name);   //no classloader can load. load class with AppClassLoader
 			}
+		}
+		return c;
+	}
+	
+	public Class<?> loadClassByRepository(String name){
+		Class<?> c = findLoadedClass(name);
+		if (c == null){
+			c = findClass(name);
 		}
 		return c;
 	}
