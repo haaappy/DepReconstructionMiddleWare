@@ -40,7 +40,7 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 					removeAction(rmvSet);   // include the update old version
 					
 					
-					// update action if the file updates 
+					// update action if the file updates  
 					updateAction(updateSet);  // addAction in the updateAction
 					
 					// execute

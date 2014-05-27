@@ -47,18 +47,24 @@ public class AdaptDependencyManager extends AbstractDependencyManager{
 			// cut Dep Relation
 			for (ClassLoader depCl: nodeClassLoader.getDepClassLoaders()){
 				String depClName = ((AdaptDepClassLoader)depCl).getClassLoaderName();
-				((AdaptDepClassLoader)loadedNodeRepository.get(depClName).getClassLoader()).removeDepInverseByName(depInverseClName);
-				nodeClassLoader.removeDepByName(depClName);	
+				if (!rmvSet.contains(depClName) && !reconstructNodeSet.contains(depClName)){
+					((AdaptDepClassLoader)loadedNodeRepository.get(depClName).getClassLoader()).removeDepInverseByName(depInverseClName);
+				}			
 			}
+			
 			// find DepInverse Relation
 			for (ClassLoader depInverseCl: nodeClassLoader.getDepInverseClassLoaders()){
 				String newDepInverseClName = ((AdaptDepClassLoader)depInverseCl).getClassLoaderName();
-				if (!rmvSet.contains(newDepInverseClName)){
+				if (!rmvSet.contains(newDepInverseClName) && !reconstructNodeSet.contains(newDepInverseClName)){
 					reconstructNodeSet.add(newDepInverseClName);
 					reconstructByDepNode(newDepInverseClName, rmvSet);
 				}
 			}
+			
+			nodeClassLoader.getDepClassLoaders().clear();
+			nodeClassLoader.getDepInverseClassLoaders().clear();
 			// remove the repository nodes
+			node.setClassLoader(null);
 			removeLoadedDeploymentNode(node);
 		}	
 	}

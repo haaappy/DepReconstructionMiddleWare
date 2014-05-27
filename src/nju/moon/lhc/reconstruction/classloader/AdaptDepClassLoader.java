@@ -108,6 +108,8 @@ public class AdaptDepClassLoader extends AbstractClassLoader {
 						for (ClassLoader repClassLoader: repositoryList){
 							c = ((AdaptDepClassLoader) repClassLoader).loadClassByRepository(name);
 							if (c != null){
+								this.depClassLoaders.add(repClassLoader);
+								((AdaptDepClassLoader) repClassLoader).depInverseClassLoaders.add(this);
 								return c;
 							}		
 						}

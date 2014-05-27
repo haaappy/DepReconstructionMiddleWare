@@ -55,6 +55,8 @@ public abstract class AdaptLoadClassManager implements InterfaceLoadClassManager
 			ClassLoader cl = classInfo.getDeploymentNode().getClassLoader();
 			try {
 				Class<?> c = cl.loadClass(classInfo.getClassName());
+				//Class<?> c = Class.forName(classInfo.getClassName(), true, cl);
+				
 				if (c == null){
 					addALoadingClass(classInfo);
 					countOfLoaded++;
