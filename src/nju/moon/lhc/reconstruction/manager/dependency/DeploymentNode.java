@@ -8,6 +8,7 @@ public class DeploymentNode {
 	private ClassLoader nodeClassLoader;
 	private ArrayList<DeploymentNode> fathers;
 	private ArrayList<DeploymentNode> children;
+	private boolean valid;
 	
 	private final String DEFAULT_NODENAME = "OSGI_SYSTEM";
 	
@@ -16,6 +17,7 @@ public class DeploymentNode {
 		nodeClassLoader = ClassLoader.getSystemClassLoader();
 		fathers = new ArrayList<DeploymentNode>();
 		children = new ArrayList<DeploymentNode>();
+		setValid(true);
 	}
 	
 	public DeploymentNode(String nodeName){
@@ -23,6 +25,7 @@ public class DeploymentNode {
 		nodeClassLoader = null;
 		fathers = new ArrayList<DeploymentNode>();
 		children = new ArrayList<DeploymentNode>();
+		setValid(true);
 	}
 	
 	public String getNodeName(){
@@ -39,6 +42,14 @@ public class DeploymentNode {
 	
 	public ClassLoader getClassLoader(){
 		return nodeClassLoader;
+	}
+	
+	public boolean getValid() {
+		return valid;
+	}
+
+	public void setValid(boolean valid) {
+		this.valid = valid;
 	}
 	
 	public void setAFather(DeploymentNode father){
@@ -112,4 +123,6 @@ public class DeploymentNode {
 	public int hashCode(){
 		return nodeName.hashCode();
 	}
+
+	
 }

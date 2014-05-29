@@ -29,25 +29,30 @@ public class AdaptDependencyManager extends AbstractDependencyManager{
 	}
 	
 	public void removeLoadedDeploymentNode(DeploymentNode node){
+		AdaptDepClassLoader nodeClassLoader = (AdaptDepClassLoader) node.getClassLoader();
+		nodeClassLoader.getDepClassLoaders().clear();
+		nodeClassLoader.getDepInverseClassLoaders().clear();		
+		node.setClassLoader(null);
 		loadedNodeRepository.remove(node.getNodeName());
 	}
 	
 	// TODO  remove Action. need to check carefully! important method to reconstruct dependency
-	public void reconstructDependency(HashSet<String> rmvSet){
-		for (String rmvStr: rmvSet){
-			reconstructByDepNode(rmvStr, rmvSet);
+	public void updateDeploymentNodeBySet(HashSet<String> updateSet){
+		for (String updateStr: updateSet){
+			reconstructByDepNode(updateStr, updateSet);
+			reconstructNodeSet.add(updateStr);
 		}
 		
 	}
 	
-	public void reconstructByDepNode(String depInverseClName, HashSet<String> rmvSet){
+	public void reconstructByDepNode(String depInverseClName, HashSet<String> updateSet){
 		DeploymentNode node = loadedNodeRepository.get(depInverseClName);
 		if (node != null){
 			AdaptDepClassLoader nodeClassLoader = (AdaptDepClassLoader) node.getClassLoader();
 			// cut Dep Relation
 			for (ClassLoader depCl: nodeClassLoader.getDepClassLoaders()){
 				String depClName = ((AdaptDepClassLoader)depCl).getClassLoaderName();
-				if (!rmvSet.contains(depClName) && !reconstructNodeSet.contains(depClName)){
+				if (!updateSet.contains(depClName) && !reconstructNodeSet.contains(depClName)){
 					((AdaptDepClassLoader)loadedNodeRepository.get(depClName).getClassLoader()).removeDepInverseByName(depInverseClName);
 				}			
 			}
@@ -55,25 +60,47 @@ public class AdaptDependencyManager extends AbstractDependencyManager{
 			// find DepInverse Relation
 			for (ClassLoader depInverseCl: nodeClassLoader.getDepInverseClassLoaders()){
 				String newDepInverseClName = ((AdaptDepClassLoader)depInverseCl).getClassLoaderName();
-				if (!rmvSet.contains(newDepInverseClName) && !reconstructNodeSet.contains(newDepInverseClName)){
+				if (!updateSet.contains(newDepInverseClName) && !reconstructNodeSet.contains(newDepInverseClName)){
 					reconstructNodeSet.add(newDepInverseClName);
-					reconstructByDepNode(newDepInverseClName, rmvSet);
+					reconstructByDepNode(newDepInverseClName, updateSet);
 				}
 			}
 			
-			nodeClassLoader.getDepClassLoaders().clear();
-			nodeClassLoader.getDepInverseClassLoaders().clear();
-			// remove the repository nodes
-			node.setClassLoader(null);
+			// remove the repository nodes			
 			removeLoadedDeploymentNode(node);
 		}	
 	}
 	
 	// addAction
-	public void addNewDeploymentNode(HashSet<String> addSet){
+	public void addNewDeploymentNodeBySet(HashSet<String> addSet){
 		reconstructNodeSet.addAll(addSet);
 		MiddleWareConfig.getInstance().getLcManager().loadClassByDeploymentNameSet(reconstructNodeSet);
 		reconstructNodeSet.clear();
+	}
+	
+	
+	// TODO removeAction
+	public void removeDeploymentNodeBySet(HashSet<String> rmvSet){
+		for (String nodeName: rmvSet){
+			DeploymentNode node = loadedNodeRepository.get(nodeName);
+			if (node != null){
+				AdaptDepClassLoader nodeClassLoader = (AdaptDepClassLoader) node.getClassLoader();
+				
+				// cut Dep Relation
+				for (ClassLoader depCl: nodeClassLoader.getDepClassLoaders()){
+					String depClName = ((AdaptDepClassLoader)depCl).getClassLoaderName();
+					((AdaptDepClassLoader)loadedNodeRepository.get(depClName).getClassLoader()).removeDepInverseByName(nodeName);						
+				}
+							
+				// find DepInverse Relation
+				for (ClassLoader depInverseCl: nodeClassLoader.getDepInverseClassLoaders()){
+					String depInverseClName = ((AdaptDepClassLoader)depInverseCl).getClassLoaderName();
+					((AdaptDepClassLoader)loadedNodeRepository.get(depInverseClName).getClassLoader()).removeDepInverseByName(nodeName);
+				}
+			}
+			// total delete node
+			removeLoadedDeploymentNode(node);		
+		}
 	}
 	
 	public ArrayList<ClassLoader> getAllRepositoryClassLoaders(){

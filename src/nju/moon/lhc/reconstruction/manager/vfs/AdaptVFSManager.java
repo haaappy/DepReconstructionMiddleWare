@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import nju.moon.lhc.reconstruction.classloader.AdaptDepClassLoader;
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.main.MiddleWareMain;
 import nju.moon.lhc.reconstruction.util.XMLFinalField;
 import nju.moon.lhc.reconstruction.util.XMLReader;
 
 import nju.moon.lhc.reconstruction.manager.dependency.AdaptDependencyManager;
+import nju.moon.lhc.reconstruction.manager.dependency.DeploymentNode;
 
 public abstract class AdaptVFSManager extends AbstractVFSManager{
 	
@@ -29,22 +31,22 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 					System.out.println("The time is: " + new Date().toString() + " and scan is start!");
 					MiddleWareMain.application.addTextAreaConsole("The time is: " + new Date().toString() + " and scan is start!");
 					
-					// get the remove file names
+					// get the remove file names and do action
 					HashSet<String> rmvSet = getRemoveFileName();
-					// get the update file names
+					removeAction(rmvSet);
+			
+					// get the update file names and do action
 					HashSet<String> updateSet = getUpdateFileName();
+					updateAction(updateSet);
 					
-					rmvSet.addAll(updateSet);
+					// get the add file names and do action
+					HashSet<String> addSet = getAddFileName();
+					addAction(addSet);
 					
-					// remove action if the file does not exsist
-					removeAction(rmvSet);   // include the update old version
-					
-					
-					// update action if the file updates  
-					updateAction(updateSet);  // addAction in the updateAction
 					
 					// execute
-					for (String nodeName: updateSet){
+					addSet.addAll(updateSet);
+					for (String nodeName: addSet){
 						for (String mainNodeName: XMLReader.readInfoByXMLFile(rootDir + nodeName + "/" + nodeName + ".xml", XMLFinalField.INVOKE_MAIN_NODE)){
 							MiddleWareMain.executeMainMethodByNode(mainNodeName);
 						}	
@@ -63,7 +65,7 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 	}
 	
 	
-	// the action that vfs remove the file 
+	// TODO the action that vfs remove the file 
 	@Override
 	protected void removeAction(HashSet<String> rmvSet){   	
 		// remove the 'deploymetSet'
@@ -75,8 +77,8 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 		}
 		deploymentSet.removeAll(delSet);
 	
-		// *** important to reconstruct  ****
-		((AdaptDependencyManager)MiddleWareConfig.getInstance().getDepManager()).reconstructDependency(rmvSet);
+		// remove the relation and repository
+		((AdaptDependencyManager)MiddleWareConfig.getInstance().getDepManager()).removeDeploymentNodeBySet(rmvSet);
 		
 	}
 		
@@ -84,16 +86,19 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 	// the action that vfs add the file
 	@Override
 	protected void addAction(HashSet<String> addSet){
-		((AdaptDependencyManager)MiddleWareConfig.getInstance().getDepManager()).addNewDeploymentNode(addSet);
+		((AdaptDependencyManager)MiddleWareConfig.getInstance().getDepManager()).addNewDeploymentNodeBySet(addSet);
 	}
 		
-	// the action that vfs update the file
+	// TODO the action that vfs update the file
 	@Override
-	protected void updateAction(HashSet<String> updateSet){
-		// add the add file names in the update set
-		updateSet.addAll(getAddFileName());				
-		// add action if the file adds and update		
-		addAction(updateSet);		
+	protected void updateAction(HashSet<String> updateSet){	
+		if (MiddleWareConfig.getInstance().getCurClassLoaderWay() == MiddleWareConfig.getInstance().ADAPT_DEP_CLASSLOADER){
+			// *** important to reconstruct  ****
+			((AdaptDependencyManager)MiddleWareConfig.getInstance().getDepManager()).updateDeploymentNodeBySet(updateSet);
+		}
+		else{
+			
+		}		
 	}
 		
 		
