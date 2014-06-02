@@ -53,11 +53,16 @@ public class AdaptNormalVFSManager extends AdaptVFSManager {
 		}
 		return changedFileSet;
 	}
-		
-		
+	
+	
+	
 	// the action that vfs add the file
 	@Override
 	protected void addAction(HashSet<String> addSet){
+		super.addAction(addSet);
+		
+		addSet.addAll(getUpdateFileName());  // add updatefile for mainMap
+		
 		// add the 'deploymentSet' and the 'xmlDependencyInfoMap', 'xmlMainClassInfoMap' and the deploymentNode
 		//HashMap<String, HashSet<String>> addDepMap = new HashMap<String, HashSet<String>>();
 		HashMap<String, HashSet<String>> addMainMap = new HashMap<String, HashSet<String>>();
@@ -75,7 +80,7 @@ public class AdaptNormalVFSManager extends AdaptVFSManager {
 		// add the new nodeMap and the dependency
 		// TODO do sth about add action between DepManager
 		//MiddleWareConfig.getInstance().getDepManager().addDeploymentNodeByAddDepMap(addDepMap);			
-		super.addAction(addSet);
+		
 	}
 
 

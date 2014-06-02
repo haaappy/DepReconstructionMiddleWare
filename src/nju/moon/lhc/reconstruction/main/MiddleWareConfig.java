@@ -1,6 +1,8 @@
 package nju.moon.lhc.reconstruction.main;
 
 import nju.moon.lhc.reconstruction.classloader.AbstractClassLoader;
+import nju.moon.lhc.reconstruction.classloader.AdaptDepClassLoader;
+import nju.moon.lhc.reconstruction.classloader.AdaptExtDepClassLoader;
 import nju.moon.lhc.reconstruction.classloader.CircleExtReconstructionClassLoader;
 import nju.moon.lhc.reconstruction.classloader.ExtReconstructionClassLoader;
 import nju.moon.lhc.reconstruction.classloader.ReconstructionClassLoader;
@@ -40,6 +42,7 @@ public class MiddleWareConfig {
 	public static final int EXT_RECONSTRUCTION_CLASSLOADER = 4;
 	public static final int CIRCLE_EXT_RECONSTRUCTION_CLASSLOADER = 5;
 	public static final int ADAPT_DEP_CLASSLOADER = 6;
+	public static final int ADAPT_EXT_DEP_CLASSLOADER = 7;
 	
 	
 	private AbstractDependencyManager depManager;
@@ -105,7 +108,7 @@ public class MiddleWareConfig {
 	}
 
 	private void setManagersByCurDeploymentWay(String way, String classloaderName) {
-		if (classloaderName.equals("AdaptDepClassLoader")){
+		if (classloaderName.equals("AdaptDepClassLoader") || classloaderName.equals("AdaptExtDepClassLoader")){
 			setDepManager(new AdaptDependencyManager());
 			if (way.equals("Normal")){
 				setLcManager(new AdaptNormalLoadClassManager());
@@ -150,6 +153,12 @@ public class MiddleWareConfig {
 		}
 		else if (curClassLoader == MiddleWareConfig.CIRCLE_EXT_RECONSTRUCTION_CLASSLOADER){
 			return new CircleExtReconstructionClassLoader(curMiddleWareHome, nodeName);
+		}
+		else if (curClassLoader == MiddleWareConfig.ADAPT_DEP_CLASSLOADER){
+			return new AdaptDepClassLoader(curMiddleWareHome, nodeName);
+		}
+		else if(curClassLoader == MiddleWareConfig.ADAPT_EXT_DEP_CLASSLOADER){
+			return new AdaptExtDepClassLoader(curMiddleWareHome, nodeName);
 		}
 		else{
 			System.out.println("Error in createClassLoaderByName");
@@ -274,6 +283,9 @@ public class MiddleWareConfig {
 		else if (str.equals("AdaptDepClassLoader")){
 			setCurClassLoaderWay(MiddleWareConfig.ADAPT_DEP_CLASSLOADER);
 		}
+		else if (str.equals("AdaptExtDepClassLoader")){
+			setCurClassLoaderWay(MiddleWareConfig.ADAPT_EXT_DEP_CLASSLOADER);
+		}
 		else{
 			System.out.println("Error in initConfig in setCurClassLoaderByStr. ");
 			setCurClassLoaderWay(MiddleWareConfig.RECONSTRUCTION_CLASSLOADER);
@@ -303,8 +315,11 @@ public class MiddleWareConfig {
 		else if (str.equals("CircleExtReconstructionClassLoader")){
 			setDefaultClassLoaderWay(MiddleWareConfig.CIRCLE_EXT_RECONSTRUCTION_CLASSLOADER);
 		}
-		else if (str.equals("AdaptDependencyClassLoader")){
+		else if (str.equals("AdaptDepClassLoader")){
 			setDefaultClassLoaderWay(MiddleWareConfig.ADAPT_DEP_CLASSLOADER);
+		}
+		else if (str.equals("AdaptExtDepClassLoader")){
+			setDefaultClassLoaderWay(MiddleWareConfig.ADAPT_EXT_DEP_CLASSLOADER);
 		}
 		else{
 			System.out.println("Error in initConfig in setDefaultClassLoaderByStr. ");

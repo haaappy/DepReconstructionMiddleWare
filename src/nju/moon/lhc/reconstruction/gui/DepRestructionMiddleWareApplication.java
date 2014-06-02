@@ -527,7 +527,7 @@ public class DepRestructionMiddleWareApplication extends SingleFrameApplication 
     	if(jComboBox1 == null) {
     		ComboBoxModel jComboBox1Model = 
     				new DefaultComboBoxModel(
-    						new String[] { "ReconstructionClassLoader", "ExtReconstructionClassLoader", "CircleExtReconstructionClassLoader", "AdaptDepClassLoader"});
+    						new String[] { "ReconstructionClassLoader", "ExtReconstructionClassLoader", "CircleExtReconstructionClassLoader", "AdaptDepClassLoader", "AdaptExtDepClassLoader"});
     		jComboBox1 = new JComboBox();
     		jComboBox1.setModel(jComboBox1Model);
     		jComboBox1.setBounds(479, 41, 292, 28);

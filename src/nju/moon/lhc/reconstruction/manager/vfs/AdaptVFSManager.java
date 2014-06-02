@@ -44,7 +44,7 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 					addAction(addSet);
 					
 					
-					// execute
+					// execute TODO ****************  2 cases
 					addSet.addAll(updateSet);
 					for (String nodeName: addSet){
 						for (String mainNodeName: XMLReader.readInfoByXMLFile(rootDir + nodeName + "/" + nodeName + ".xml", XMLFinalField.INVOKE_MAIN_NODE)){
@@ -77,6 +77,11 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 		}
 		deploymentSet.removeAll(delSet);
 	
+		// delete mainMap
+		for (String rmvStr: rmvSet){
+			xmlMainClassInfoMap.remove(rmvStr);
+		}
+		
 		// remove the relation and repository
 		((AdaptDependencyManager)MiddleWareConfig.getInstance().getDepManager()).removeDeploymentNodeBySet(rmvSet);
 		
@@ -92,12 +97,12 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 	// TODO the action that vfs update the file
 	@Override
 	protected void updateAction(HashSet<String> updateSet){	
-		if (MiddleWareConfig.getInstance().getCurClassLoaderWay() == MiddleWareConfig.getInstance().ADAPT_DEP_CLASSLOADER){
+		if (MiddleWareConfig.getInstance().getCurClassLoaderWay() == MiddleWareConfig.ADAPT_DEP_CLASSLOADER){
 			// *** important to reconstruct  ****
 			((AdaptDependencyManager)MiddleWareConfig.getInstance().getDepManager()).updateDeploymentNodeBySet(updateSet);
 		}
-		else{
-			
+		else{  // *** important for AdaptExtDepClassloader
+			((AdaptDependencyManager)MiddleWareConfig.getInstance().getDepManager()).validDeploymentNodeBySet(updateSet);
 		}		
 	}
 		

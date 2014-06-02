@@ -8,6 +8,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import nju.moon.lhc.reconstruction.classloader.AdaptDepClassLoader;
+import nju.moon.lhc.reconstruction.classloader.AdaptExtDepClassLoader;
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.manager.dependency.DeploymentNode;
 
@@ -30,7 +31,14 @@ public class AdaptJarLoadClassManager extends AdaptLoadClassManager {
 		// TODO Auto-generated method stub
 		HashMap<String, DeploymentNode> nodeMap = MiddleWareConfig.getInstance().getDepManager().getNodeMap();
 		DeploymentNode curNode = nodeMap.get(deploymentName);
+		
 		ClassLoader cl = curNode.getClassLoader();
+		if (cl instanceof AdaptExtDepClassLoader){
+			if (((AdaptExtDepClassLoader)cl).getValid()){
+				curNode.setClassLoader(MiddleWareConfig.getInstance().createClassLoaderByName(deploymentName));
+				cl = curNode.getClassLoader();
+			}
+		}
 		
 		
 		try {
@@ -58,7 +66,7 @@ public class AdaptJarLoadClassManager extends AdaptLoadClassManager {
 		try{
 			ZipFile zf = new ZipFile(f.getPath());
 			DeploymentNode node = new DeploymentNode(f.getName());
-			node.setClassLoader(new AdaptDepClassLoader(MiddleWareConfig.getInstance().getCurMiddleWareHome(), f.getName()));
+			node.setClassLoader(MiddleWareConfig.getInstance().createClassLoaderByName(f.getName()));
 			for (Enumeration<?> entries = zf.entries(); entries.hasMoreElements();) { 
 				ZipEntry ze = (ZipEntry)entries.nextElement();
 				String zipEntryName = ze.getName();

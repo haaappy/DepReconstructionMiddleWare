@@ -40,7 +40,6 @@ public abstract class AbstractVFSManager {
 		return deploymentSet;
 	}
 	
-	
 	// three methods of get FileNames
 	// Including add, remove and update
 	

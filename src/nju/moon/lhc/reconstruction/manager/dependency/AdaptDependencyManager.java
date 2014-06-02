@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import nju.moon.lhc.reconstruction.classloader.AdaptDepClassLoader;
+import nju.moon.lhc.reconstruction.classloader.AdaptExtDepClassLoader;
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 
 public class AdaptDependencyManager extends AbstractDependencyManager{
@@ -45,6 +46,7 @@ public class AdaptDependencyManager extends AbstractDependencyManager{
 		
 	}
 	
+	// *** important to reconstruct  ****
 	public void reconstructByDepNode(String depInverseClName, HashSet<String> updateSet){
 		DeploymentNode node = loadedNodeRepository.get(depInverseClName);
 		if (node != null){
@@ -109,6 +111,40 @@ public class AdaptDependencyManager extends AbstractDependencyManager{
 			loadedClassLoaderList.add(node.getClassLoader());
 		}
 		return loadedClassLoaderList;
+	}
+
+	
+	// TODO updateAction when using AdaptExtDepClassLoader
+	public void validDeploymentNodeBySet(HashSet<String> updateSet) {
+		for (String updateStr: updateSet){
+			validByDepNode(updateStr, updateSet);
+		}	
+	}
+	
+	public void validByDepNode(String depInverseClName, HashSet<String> updateSet){
+		DeploymentNode node = loadedNodeRepository.get(depInverseClName);
+		if (node != null){
+			AdaptDepClassLoader nodeClassLoader = (AdaptDepClassLoader) node.getClassLoader();
+			if (((AdaptExtDepClassLoader)nodeClassLoader).getValid()){
+				// cut Dep Relation
+				for (ClassLoader depCl: nodeClassLoader.getDepClassLoaders()){
+					String depClName = ((AdaptDepClassLoader)depCl).getClassLoaderName();
+					if (!updateSet.contains(depClName)){
+						((AdaptDepClassLoader)loadedNodeRepository.get(depClName).getClassLoader()).removeDepInverseByName(depInverseClName);
+					}			
+				}
+				// find DepInverse Relation
+				for (ClassLoader depInverseCl: nodeClassLoader.getDepInverseClassLoaders()){
+					String newDepInverseClName = ((AdaptDepClassLoader)depInverseCl).getClassLoaderName();
+					if (!updateSet.contains(newDepInverseClName)){
+						validByDepNode(newDepInverseClName, updateSet);
+					}
+				}
+			}
+				
+			// change valid of the repository nodes			
+			((AdaptExtDepClassLoader)nodeClassLoader).setValid(false);
+		}
 	}
 
 }

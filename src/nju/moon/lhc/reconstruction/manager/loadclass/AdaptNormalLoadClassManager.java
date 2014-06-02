@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import nju.moon.lhc.reconstruction.classloader.AdaptDepClassLoader;
+import nju.moon.lhc.reconstruction.classloader.AdaptExtDepClassLoader;
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
 import nju.moon.lhc.reconstruction.manager.dependency.DeploymentNode;
 
@@ -28,6 +29,14 @@ public class AdaptNormalLoadClassManager extends AdaptLoadClassManager {
 		HashMap<String, DeploymentNode> nodeMap = MiddleWareConfig.getInstance().getDepManager().getNodeMap();
 		DeploymentNode curNode = nodeMap.get(deploymentName);
 		ClassLoader cl = curNode.getClassLoader();
+		
+		if (cl instanceof AdaptExtDepClassLoader){
+			if (((AdaptExtDepClassLoader)cl).getValid() == false){
+				curNode.setClassLoader(MiddleWareConfig.getInstance().createClassLoaderByName(deploymentName));
+				cl = curNode.getClassLoader();
+			}
+		}
+		
 		try {
 			return cl.loadClass(className.substring(0, className.lastIndexOf('.')));    // load the XXXX   for example： NodeAMain
 			// System.out.println("success load "+className);
@@ -51,7 +60,7 @@ public class AdaptNormalLoadClassManager extends AdaptLoadClassManager {
 	@Override
 	protected void prepareAdeploymentByFile(File f) {
 		DeploymentNode node = new DeploymentNode(f.getName());
-		node.setClassLoader(new AdaptDepClassLoader(MiddleWareConfig.getInstance().getCurMiddleWareHome(), f.getName()));
+		node.setClassLoader(MiddleWareConfig.getInstance().createClassLoaderByName(f.getName()));
 		for (File classFile: f.listFiles()){
 			if (classFile.isFile() && classFile.getName().endsWith(".class")){
 				addALoadingClass(node, changeClassNameFormat(classFile.getName()));

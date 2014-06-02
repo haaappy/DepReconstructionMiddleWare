@@ -39,12 +39,13 @@ public class AdaptJarVFSManager extends AdaptVFSManager {
 			}
 		}
 	}
-
+	
 	@Override
 	protected void addAction(HashSet<String> addSet) {
-		// TODO Auto-generated method stub
-		// add the 'deploymentSet' and the 'xmlDependencyInfoMap', 'xmlMainClassInfoMap' and the deploymentNode
-		//HashMap<String, HashSet<String>> addDepMap = new HashMap<String, HashSet<String>>();
+		super.addAction(addSet);
+		
+		addSet.addAll(getUpdateFileName());  // add updatefile for mainMap
+		
 		HashMap<String, HashSet<String>> addMainMap = new HashMap<String, HashSet<String>>();
 		
 		for (String fileName: addSet){
@@ -57,13 +58,7 @@ public class AdaptJarVFSManager extends AdaptVFSManager {
 			addMainMap.put(fileName, mainSet);
 			
 		}
-		//xmlDependencyInfoMap.putAll(addDepMap);
 		xmlMainClassInfoMap.putAll(addMainMap);
-		// add the new nodeMap and the dependency
-		
-		// TODO do sth about add action between DepManager
-		//MiddleWareConfig.getInstance().getDepManager().addDeploymentNodeByAddDepMap(addDepMap);			
-		super.addAction(addSet);
 	}
 
 

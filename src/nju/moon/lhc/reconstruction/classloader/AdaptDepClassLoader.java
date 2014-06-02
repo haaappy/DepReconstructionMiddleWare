@@ -20,14 +20,6 @@ public class AdaptDepClassLoader extends AbstractClassLoader {
 		this.rootName = rootDir + classLoaderName;
 	}
 	
-//	public AdaptDepClassLoader(ReconstructionClassLoader cl){
-//		this.rootDir = cl.rootDir;
-//		this.parents = new ArrayList<ClassLoader>();
-//		this.parents.addAll(cl.parents);
-//		this.setClassLoaderName(cl.getClassLoaderName());
-//		this.rootName = this.rootDir + classLoaderName;
-//	}
-	
 	public AdaptDepClassLoader(){
 		this.depClassLoaders = new ArrayList<ClassLoader>();
 		this.depInverseClassLoaders = new ArrayList<ClassLoader>();
@@ -94,7 +86,7 @@ public class AdaptDepClassLoader extends AbstractClassLoader {
 					}
 				}
 				else{
-					// loadby itself
+					// load by itself
 					c = findClass(name);
 					if (c == null){
 						for (ClassLoader depClassLoader: depClassLoaders){

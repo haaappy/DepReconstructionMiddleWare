@@ -36,7 +36,8 @@ public class MiddleWareMain {
 		}		
 		
 		// TODO different start
-		if (MiddleWareConfig.getInstance().getCurClassLoaderWay() == MiddleWareConfig.ADAPT_DEP_CLASSLOADER){
+		if (MiddleWareConfig.getInstance().getCurClassLoaderWay() == MiddleWareConfig.ADAPT_DEP_CLASSLOADER 
+				|| MiddleWareConfig.getInstance().getCurClassLoaderWay() == MiddleWareConfig.ADAPT_EXT_DEP_CLASSLOADER ){
 			((AdaptLoadClassManager)MiddleWareConfig.getInstance().getLcManager()).initAdaptLoadClassManager();		
 		}
 		else{
