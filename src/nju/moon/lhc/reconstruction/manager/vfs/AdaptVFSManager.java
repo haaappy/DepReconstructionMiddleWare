@@ -28,6 +28,8 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 				while(MiddleWareConfig.getInstance().getIsRunning()){
 					Thread.sleep(MiddleWareConfig.getInstance().getCurPollingTime());
 					
+					long t1 = System.nanoTime();
+					
 					System.out.println("The time is: " + new Date().toString() + " and scan is start!");
 					MiddleWareMain.application.addTextAreaConsole("The time is: " + new Date().toString() + " and scan is start!");
 					
@@ -44,16 +46,22 @@ public abstract class AdaptVFSManager extends AbstractVFSManager{
 					addAction(addSet);
 					
 					
-					// execute TODO ****************  2 cases
+					// execute 
 					addSet.addAll(updateSet);
-					for (String nodeName: addSet){
-						for (String mainNodeName: XMLReader.readInfoByXMLFile(rootDir + nodeName + "/" + nodeName + ".xml", XMLFinalField.INVOKE_MAIN_NODE)){
-							MiddleWareMain.executeMainMethodByNode(mainNodeName);
-						}	
+					
+					updateExcuteBySet(addSet);
+					
+					
+					/*
+					if (updateSet.size() != 0){
+						MiddleWareMain.executeMainMethodByNode("A3");
 					}
+					*/
+					
 					
 					System.out.println("The time is: " + new Date().toString() + " and scan is over!");
 					MiddleWareMain.application.addTextAreaConsole("The time is: " + new Date().toString() + " and scan is over!");
+					System.out.println("Update Time Adapt: " + (System.nanoTime() - t1));
 				}
 			}
 			catch(Exception e){

@@ -66,7 +66,7 @@ public class CircleExtReconstructionClassLoader extends ExtReconstructionClassLo
 				for (ClassLoader parent: parents){
 					try{
 						if (parent instanceof CircleExtReconstructionClassLoader){
-							c = ((CircleExtReconstructionClassLoader) parent).loadClassForParent(name, visitTime);
+							c = ((CircleExtReconstructionClassLoader) parent).loadClassForParent(name, firstLoadTime);
 						}
 						else{
 							c = parent.loadClass(name);

@@ -31,6 +31,8 @@ abstract public class VFSManager extends AbstractVFSManager{
 				while(MiddleWareConfig.getInstance().getIsRunning()){
 					Thread.sleep(MiddleWareConfig.getInstance().getCurPollingTime());
 					
+					long t1 = System.nanoTime();
+					
 					System.out.println("The time is: " + new Date().toString() + " and scan is start!");
 					MiddleWareMain.application.addTextAreaConsole("The time is: " + new Date().toString() + " and scan is start!");
 					
@@ -45,24 +47,31 @@ abstract public class VFSManager extends AbstractVFSManager{
 					updateAction(updateSet);  // addAction in the updateAction
 					
 					// reconstruct dependency!!!!  
-					reconstructDependency(updateSet);					
-					// load the new version class
-					//LoadClassManager.getInstance().loadClassByDeploymentNameSet(updateSet);
+					if (updateSet.size()!=0){
+						reconstructDependency(updateSet);
+						// load the new version class
+						//LoadClassManager.getInstance().loadClassByDeploymentNameSet(updateSet);
+						
+						if (((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).isCircleDependency(xmlDependencyInfoMap) 
+								&& MiddleWareConfig.getInstance().getCurClassLoaderWay() != MiddleWareConfig.CIRCLE_EXT_RECONSTRUCTION_CLASSLOADER){
+							System.out.println("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
+							MiddleWareMain.application.addTextAreaConsole("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
+						}
+						
+						// execute	
+						updateExcuteBySet(updateSet);
+						
+					}									
 					
-					if (((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).isCircleDependency(xmlDependencyInfoMap)){
-						System.out.println("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
-						MiddleWareMain.application.addTextAreaConsole("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
+					/*
+					if (updateSet.size() != 0){
+						MiddleWareMain.executeMainMethodByNode("A3");
 					}
-					
-					// execute
-					for (String nodeName: updateSet){
-						for (String mainNodeName: XMLReader.readInfoByXMLFile(rootDir + nodeName + "/" + nodeName + ".xml", XMLFinalField.INVOKE_MAIN_NODE)){
-							MiddleWareMain.executeMainMethodByNode(mainNodeName);
-						}	
-					}
+					*/
 					
 					System.out.println("The time is: " + new Date().toString() + " and scan is over!");
 					MiddleWareMain.application.addTextAreaConsole("The time is: " + new Date().toString() + " and scan is over!");
+					System.out.println("Update Time Circle: " + (System.nanoTime() - t1));
 				}
 			}
 			catch(Exception e){
@@ -96,8 +105,9 @@ abstract public class VFSManager extends AbstractVFSManager{
 	//*************  important  *********************************
 	// reconstruct the dependency before the load class and copy the main class's class loader
 	protected void reconstructDependency(HashSet<String> newSet){
+		HashSet<String> alreadySet = new HashSet<String>();
 		for (String dependencyName: newSet){
-			reconstructDependencyByName(dependencyName);
+			reconstructDependencyByName(dependencyName, newSet, alreadySet);
 		}
 		// copy the main class's class loader
 //		for (String nodeName: newSet){
@@ -112,12 +122,16 @@ abstract public class VFSManager extends AbstractVFSManager{
 	
 	// *************  important  *********************************
 	// reconstruct the dependency before the load class
-	protected void reconstructDependencyByName(String dependencyName){
+	protected void reconstructDependencyByName(String dependencyName, HashSet<String> newSet, HashSet<String> alreadySet){
 		for (String nodeName: xmlDependencyInfoMap.keySet()){
 			for (String depName: xmlDependencyInfoMap.get(nodeName)){
 				if (depName.equals(dependencyName)){
 					((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).reconstructDependencyByTwoNode(nodeName, depName);
-					reconstructDependencyByName(nodeName);   // recursion for reconstructing dependency
+					if (!newSet.contains(nodeName) && !alreadySet.contains(nodeName)){
+						alreadySet.add(nodeName);
+						reconstructDependencyByName(nodeName, newSet, alreadySet);   // recursion for reconstructing dependency
+					}
+					
 				}
 			}
 		}

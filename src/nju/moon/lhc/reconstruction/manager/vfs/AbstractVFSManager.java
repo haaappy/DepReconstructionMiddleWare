@@ -29,6 +29,7 @@ public abstract class AbstractVFSManager {
 	
 	abstract protected HashSet<String> getAllChangedFileName();
 	
+	abstract protected void updateExcuteBySet(HashSet<String> changeSet);
 	
 	
 	

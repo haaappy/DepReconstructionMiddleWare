@@ -20,7 +20,8 @@ public class AdaptNormalLoadClassManager extends AdaptLoadClassManager {
 
 	@Override
 	protected String changeClassNameFormat(String className) {
-		return className.substring(0, className.lastIndexOf('.'));
+		String formatName = className.substring(0, className.lastIndexOf(".class"));
+		return formatName;
 	}
 	
 	@Override

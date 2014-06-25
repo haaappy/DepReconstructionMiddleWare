@@ -87,7 +87,7 @@ public class AdaptDepClassLoader extends AbstractClassLoader {
 				}
 				else{
 					// load by itself
-					c = findClass(name);
+					c = findClass(name); // System.out.println(this.classLoaderName + "  " + name + ":  " + (c==null));
 					if (c == null){
 						for (ClassLoader depClassLoader: depClassLoaders){
 							c = ((AdaptDepClassLoader) depClassLoader).loadClassByRepository(name);
@@ -110,7 +110,7 @@ public class AdaptDepClassLoader extends AbstractClassLoader {
 				}			
 			}
 			catch (ClassNotFoundException e){
-				c = ClassLoader.getSystemClassLoader().loadClass(name);   //no classloader can load. load class with AppClassLoader
+				//c = ClassLoader.getSystemClassLoader().loadClass(name);   //no classloader can load. load class with AppClassLoader
 			}
 		}
 		return c;

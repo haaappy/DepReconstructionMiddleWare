@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
+import nju.moon.lhc.reconstruction.main.MiddleWareMain;
 import nju.moon.lhc.reconstruction.manager.dependency.AdaptDependencyManager;
 import nju.moon.lhc.reconstruction.util.XMLFinalField;
 import nju.moon.lhc.reconstruction.util.XMLReader;
@@ -74,6 +75,16 @@ public class AdaptJarVFSManager extends AdaptVFSManager {
 			}
 		}
 		return changedFileSet;
+	}
+
+	@Override
+	protected void updateExcuteBySet(HashSet<String> changeSet) {
+		for (String nodeName: changeSet){
+			String xmlName = nodeName.substring(0, nodeName.lastIndexOf(".jar")) + ".xml";
+			for (String mainNodeName: XMLReader.readInfoByXMLFileFromJar(rootDir + nodeName, xmlName, XMLFinalField.INVOKE_MAIN_NODE)){
+				MiddleWareMain.executeMainMethodByNode(mainNodeName);
+			}	
+		}
 	}
 
 

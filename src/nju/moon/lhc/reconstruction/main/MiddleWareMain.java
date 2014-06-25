@@ -38,13 +38,20 @@ public class MiddleWareMain {
 		// TODO different start
 		if (MiddleWareConfig.getInstance().getCurClassLoaderWay() == MiddleWareConfig.ADAPT_DEP_CLASSLOADER 
 				|| MiddleWareConfig.getInstance().getCurClassLoaderWay() == MiddleWareConfig.ADAPT_EXT_DEP_CLASSLOADER ){
-			((AdaptLoadClassManager)MiddleWareConfig.getInstance().getLcManager()).initAdaptLoadClassManager();		
+			
+			long t1 = System.nanoTime();
+			((AdaptLoadClassManager)MiddleWareConfig.getInstance().getLcManager()).initAdaptLoadClassManager();
+			executeAllMainMethode();
+			System.out.println("Init Time Adapt Classloader: " + (System.nanoTime() - t1));
 		}
 		else{
+			long t1 = System.nanoTime();
 			((DependencyManager)MiddleWareConfig.getInstance().getDepManager()).createDependencyGraph();
+			executeAllMainMethode();
+			System.out.println("Init Time Circle Classloader: " + (System.nanoTime() - t1));
 		}
 		
-		executeAllMainMethode();
+		//executeAllMainMethode();
 	}
 	
 	public static void stop(){

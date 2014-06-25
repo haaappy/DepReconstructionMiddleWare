@@ -19,7 +19,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	
 	
 	protected byte[] getClassData(String className){
-		int way = MiddleWareConfig.getInstance().getCurClassLoaderWay();
+		int way = MiddleWareConfig.getInstance().getCurDeploymentWay();
 		if (way == MiddleWareConfig.DEPLOY_WAY_NORMAL){
 			return getClassDataNormalWay(className);
 		}
@@ -59,10 +59,13 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	protected byte[] getClassDataJarWay(String className){
 		String path = classNameToPathJarWay(className);
 		try{
-			ZipFile zf = new ZipFile(rootDir + classLoaderName + ".jar");
+			ZipFile zf = new ZipFile(rootDir + classLoaderName);
 			ZipEntry ze = zf.getEntry(path);
 					
 			try{
+				if (ze == null){
+					return null;
+				}
       			InputStream ins = zf.getInputStream(ze);
       			ByteArrayOutputStream baos = new ByteArrayOutputStream();
       			int bufferSize = 4096;
@@ -74,11 +77,11 @@ public abstract class AbstractClassLoader extends ClassLoader {
       			ins.close();
       			return baos.toByteArray();
       		}catch(IOException e){
-      			e.printStackTrace();  // exception and return null
+      			//e.printStackTrace();  // exception and return null
       		}
 		}
 		catch(Exception e){
-			e.printStackTrace();
+			//e.printStackTrace();  // exception and return null
 		}
 			
 		return null;

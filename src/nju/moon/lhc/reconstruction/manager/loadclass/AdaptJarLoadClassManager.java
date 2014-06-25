@@ -23,7 +23,9 @@ public class AdaptJarLoadClassManager extends AdaptLoadClassManager {
 
 	@Override
 	protected String changeClassNameFormat(String className) {
-		return className.replace(File.separatorChar, '.');
+		String formatName = className.replace(File.separatorChar, '.');
+		formatName = formatName.substring(0, formatName.lastIndexOf(".class"));
+		return formatName;
 	}
 	
 	@Override

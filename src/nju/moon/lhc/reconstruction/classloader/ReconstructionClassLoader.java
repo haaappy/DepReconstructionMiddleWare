@@ -129,7 +129,7 @@ public class ReconstructionClassLoader extends AbstractClassLoader {
 	}
 	
 	protected byte[] getClassData(String className){
-		int way = MiddleWareConfig.getInstance().getCurClassLoaderWay();
+		int way = MiddleWareConfig.getInstance().getCurDeploymentWay();
 		if (way == MiddleWareConfig.DEPLOY_WAY_NORMAL){
 			return getClassDataNormalWay(className);
 		}
@@ -156,7 +156,7 @@ public class ReconstructionClassLoader extends AbstractClassLoader {
 			ins.close();
 			return baos.toByteArray();
 		}catch(IOException e){
-			//e.printStackTrace();   exception and return null
+			//e.printStackTrace();   exception and return null and no print info
 		}
 		return null;
 	}
@@ -169,10 +169,13 @@ public class ReconstructionClassLoader extends AbstractClassLoader {
 	protected byte[] getClassDataJarWay(String className){
 		String path = classNameToPathJarWay(className);
 		try{
-			ZipFile zf = new ZipFile(rootDir + classLoaderName + ".jar");
+			ZipFile zf = new ZipFile(rootDir + classLoaderName);
 			ZipEntry ze = zf.getEntry(path);
 					
 			try{
+				if (ze == null){
+					return null;
+				}				
       			InputStream ins = zf.getInputStream(ze);
       			ByteArrayOutputStream baos = new ByteArrayOutputStream();
       			int bufferSize = 4096;
@@ -184,11 +187,11 @@ public class ReconstructionClassLoader extends AbstractClassLoader {
       			ins.close();
       			return baos.toByteArray();
       		}catch(IOException e){
-      			e.printStackTrace();  // exception and return null
+      			// e.printStackTrace();  // exception and return null and no print info
       		}
 		}
-		catch(Exception e){
-			e.printStackTrace();
+		catch(Exception e){ 
+			// e.printStackTrace();   // exception and return null and no print info
 		}
 			
 		return null;

@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import nju.moon.lhc.reconstruction.classloader.ReconstructionClassLoader;
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
+import nju.moon.lhc.reconstruction.main.MiddleWareMain;
 import nju.moon.lhc.reconstruction.manager.vfs.VFSManager;
 
 
@@ -26,7 +27,13 @@ public class DependencyManager extends AbstractDependencyManager{
 			
 		for (String key: xmlInfoMap.keySet()){
 			for (String str: xmlInfoMap.get(key)){
-				HashSet<String> hs = reverseMap.get(str);
+				HashSet<String> hs;
+				if (reverseMap.containsKey(str)){
+					hs = reverseMap.get(str);
+				}
+				else{
+					hs = new HashSet<String>();
+				}
 				hs.add(key);
 				reverseMap.put(str, hs);
 			}
@@ -81,8 +88,9 @@ public class DependencyManager extends AbstractDependencyManager{
 	// create the dependencyGraph when init the system
 	public void createDependencyGraph(){
 		HashMap<String,HashSet<String>> xmlInfoMap = ((VFSManager)(MiddleWareConfig.getInstance().getVfsManager())).getXMLDependencyInfoMap();
-		if (isCircleDependency(xmlInfoMap)){
+		if (isCircleDependency(xmlInfoMap) && MiddleWareConfig.getInstance().getCurClassLoaderWay() != MiddleWareConfig.CIRCLE_EXT_RECONSTRUCTION_CLASSLOADER){
 			System.out.println("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
+			MiddleWareMain.application.addTextAreaConsole("Warning!!! The circle exists in the dependency!!\n Please use CircleExtReconstructionClassLoader!");
 		}
 		
 		addDeploymentNodeByAddDepMap(xmlInfoMap);

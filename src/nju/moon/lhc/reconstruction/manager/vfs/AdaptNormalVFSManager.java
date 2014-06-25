@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import nju.moon.lhc.reconstruction.main.MiddleWareConfig;
+import nju.moon.lhc.reconstruction.main.MiddleWareMain;
 import nju.moon.lhc.reconstruction.util.XMLFinalField;
 import nju.moon.lhc.reconstruction.util.XMLReader;
 import nju.moon.lhc.reconstruction.manager.dependency.AdaptDependencyManager;
@@ -81,6 +82,16 @@ public class AdaptNormalVFSManager extends AdaptVFSManager {
 		// TODO do sth about add action between DepManager
 		//MiddleWareConfig.getInstance().getDepManager().addDeploymentNodeByAddDepMap(addDepMap);			
 		
+	}
+
+
+	@Override
+	protected void updateExcuteBySet(HashSet<String> changeSet) {
+		for (String nodeName: changeSet){
+			for (String mainNodeName: XMLReader.readInfoByXMLFile(rootDir + nodeName + "/" + nodeName + ".xml", XMLFinalField.INVOKE_MAIN_NODE)){
+				MiddleWareMain.executeMainMethodByNode(mainNodeName);
+			}	
+		}
 	}
 
 
